@@ -1,0 +1,89 @@
+/* Global Variables I Guess */
+:root {
+  --main-text-color: #cc241d;
+}
+/* /Global Variables I Guess */
+
+/* Unsorted */
+
+body {
+  /*background-image: url('../images/Wallpaper1.jpg');*/
+  background-color: #282828;
+}
+
+h2 {
+  /*color: var(--main-text-color);*/
+  color: #d79921;
+  font-size: 200%;
+  font-family: Iosevka;
+  border-bottom: 2px solid #928374;
+  margin-left: 100px;
+  margin-right: 100px;
+}
+
+h1 {
+  color: var(--main-text-color);
+  font-family: Iosevka;
+  text-align: center;
+  font-size: 300%;
+  border: 3px solid #928374;
+  background-color: #3c3836;
+  border-radius: 10px;
+  margin-left: 50px;
+  margin-right: 50px;
+}
+
+small {
+  color: #fb4934;
+  font-size: 30px;
+}
+
+p {
+  color: #edbbb2;
+  text-align: center;
+  font-family: Iosevka;
+}
+
+/* /Unsorted */
+
+/* NavBar */
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border-bottom: 3px solid #928374;
+}
+
+li {
+  float: right;
+  font-family: Iosevka; 
+  font-size: 20px;
+  color: #458588;
+}
+
+li a {
+  display: block;
+  font-family: "Fira Code";
+  color: #98971a;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+li a:hover {
+  background-color: #3c3836;
+}
+
+.active {
+  background-color: #3c3836;
+}
+
+.name {
+  float: left;
+  display: block;
+  text-align: center;
+  padding: 14px 16px;
+  font-size: 25px;
+}
