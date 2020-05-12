@@ -61,79 +61,12 @@
 
     <h1>My Projects will Lie Here Says I</h1>
     <div class ="slidecontainer">
-      <input type="range" min="1" max="100" value="50" class="slider" id="boardSize">
+      <input type="range" min="1" max="50" value="50" class="slider" id="boardSize">
+      <p id="soutput"></p>
     </div>
-    <canvas id="tester" width="500" height="500"></canvas>
+    <canvas id="tester" width="500" height="600"></canvas>
 
-  <script>
-    var canName = "tester";
-    const canvas = document.getElementById(canName);
-    canvas.width = window.innerWidth - canvas.offsetLeft - canvas.offsetLeft;
-    
-
-    
-    canvas.addEventListener('click', function() { }, false);
-    const ctx = canvas.getContext('2d');
-
-
-
-    ctx.fillStyle = 'white';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    
-    var elem = document.getElementById(canName),
-      elemLeft = elem.offsetLeft + elem.clientLeft,
-      elemTop = elem.offsetTop + elem.clientTop,
-      elements = [];
-
-    /*elem.addEventListener('click', function(event) {
-      var x = event.pageX - elemLeft,
-        y = event.pageY - elemTop;
-
-      elements.forEach(function(element) {
-        if (y > element.top && y < element.top + element.height
-          && x > element.left && x < element.left + element.width) {
-            console.log("clicked element #" + elements.indexOf(element));
-        }
-      });
-    }, false);*/
-
-    elem.addEventListener('click', function(event) {
-      var x = event.pageX - elemLeft,
-        y = event.pageY - elemTop;
-
-      for (var i = 0; i < elements.length; ++i) {
-        for (var j = 0; j < elements[i].length; ++j) {
-          if (y > elements[i][j].top && y < elements[i][j].top + elements[i][j].height
-            && x > elements[i][j].left && x < elements[i][j].left + elements[i][j].width) {
-            console.log("clicked element x:" + i + " y:" + j);
-          }
-        }
-      }
-    }, false);
-
-    function Tile(color, width, height, top, left) {
-      this.color = color;
-      this.width = width;
-      this.height = height;
-      this.top = top;
-      this.left = left;
-    }
-
-    elements.push([]);
-    elements.push([]);
-
-    elements[0].push(new Tile('blue', 150, 100, 20, 15));
-    elements[0].push(new Tile('red', 150, 100, 20, 200));
-    elements[1].push(new Tile('purple', 150, 100, 125, 15));
-
-
-    for (var i = 0; i < elements.length; ++i) {
-      for (var j = 0; j < elements[i].length; ++j) {
-        ctx.fillStyle = elements[i][j].color;
-        ctx.fillRect(elements[i][j].left, elements[i][j].top, elements[i][j].width, elements[i][j].height);
-      }
-    }
-  </script>
+  <script src="scripts/board.js"></script>
   </body>
 
 </html>
