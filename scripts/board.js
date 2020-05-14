@@ -6,7 +6,7 @@ var slider = document.getElementById("boardSize");
 var output = document.getElementById("soutput");
 output.innerHTML = slider.value;
 
-canvas.addEventListener("click", function () {}, false);
+canvas.addEventListener("click", function () { }, false);
 const ctx = canvas.getContext("2d");
 
 var width = 22;

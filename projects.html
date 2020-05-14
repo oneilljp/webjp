@@ -1,72 +1,75 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>Projects</title>
-    <link rel="stylesheet" href="styles/styles.css">
-  </head>
-  <style>
-    .slidecontainer {
-      width: 100%;
-    }
 
-    .slider {
-      -webkit-appearance: none;
-      appearance: none;
-      margin-left: 50px;
-      width: 95%;
-      height: 15px;
-      border-radius: 5px;
-      background: #d3d3d3;
-      outline: none;
-      opacity: 0.7;
-      -webkit-transition: .2s;
-      transition: opacity .2s;
-    }
+<head>
+  <meta charset="utf-8">
+  <title>Projects</title>
+  <link rel="stylesheet" href="styles/styles.css">
+</head>
+<style>
+  .slidecontainer {
+    width: 100%;
+  }
 
-    .slider:hover {
-      opacity: 1;
-    }
+  .slider {
+    -webkit-appearance: none;
+    appearance: none;
+    margin-left: 50px;
+    width: 95%;
+    height: 15px;
+    border-radius: 5px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+  }
 
-    /* Non Firefox Style */
-    .slider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      /* Slider Handle Properties */
-      width: 25px;
-      height: 25px;
-      border-radius: 50%;
-      background: #4CAF50; /* Can use url('path to png') to put in an icon instead */
-      cursor: pointer;
-    }
-    
-    /* Style for FireFox */
-    .slider::-moz-range-thumb {
-      width: 25px;
-      height: 25px;
-      background: #4CAF50;
-      cursor: pointer;
-    }
-  </style>
+  .slider:hover {
+    opacity: 1;
+  }
 
-  <body>
-    <ul class="navbar">
-      <li class="name">
-        &ltJohn Paul O'Neill/&gt
-      </li>
-      <li><a href="resume.html">Resume</a></li>
-      <li><a class="active" href="projects.html">Projects</a></li>
-      <li><a href="index.html">Home</a></li>
-    </ul>
+  /* Non Firefox Style */
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    /* Slider Handle Properties */
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #4CAF50;
+    /* Can use url('path to png') to put in an icon instead */
+    cursor: pointer;
+  }
 
-    <h1>My Projects will Lie Here Says I</h1>
-    <div class ="slidecontainer">
-      <input type="range" min="1" max="40" value="50" class="slider" id="boardSize">
-      <p id="soutput"></p>
-    </div>
-    <canvas id="tester" width="500" height="600"></canvas>
+  /* Style for FireFox */
+  .slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    background: #4CAF50;
+    cursor: pointer;
+  }
+</style>
 
-  <script src="scripts/board.js"></script>
-  </body>
+<body>
+  <ul class="navbar">
+    <li class="name">
+      &ltJohn Paul O'Neill/&gt
+    </li>
+    <li><a href="resume.html">Resume</a></li>
+    <li><a class="active" href="projects.html">Projects</a></li>
+    <li><a href="index.html">Home</a></li>
+  </ul>
+
+  <h1>My Projects will Lie Here Says I</h1>
+  <div class="slidecontainer">
+    <input type="range" min="1" max="40" value="50" class="slider" id="boardSize">
+    <p id="soutput"></p>
+  </div>
+  <!--<canvas id="tester" width="500" height="600"></canvas>!-->
+
+  <!--<script type="module" src="modules/board.js"></script>!-->
+  <script src="main.js" type="module"></script>
+</body>
 
 </html>
