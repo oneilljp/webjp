@@ -12,18 +12,10 @@ function create(id, parent, width, height) {
 
     return {
         ctx: ctx,
-        id: id
+        id: id,
+        width: width,
+        height: height
     };
 }
 
-function createReportlist(wrapperId) {
-    let list = document.createElement('ul');
-    list.id = wrapperId + '-reporter';
-
-    let canvasWrapper = document.getElementById(wrapperId);
-    canvasWrapper.appendChild(list);
-
-    return list.id;
-}
-
-export { create, createReportlist }
+export var myCanvas = create('myCanvas', document.body, window.innerWidth, 600);

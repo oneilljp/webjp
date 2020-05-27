@@ -49,6 +49,49 @@
     background: #4CAF50;
     cursor: pointer;
   }
+
+  /*Selection Styling*/
+  .box {
+    top: 50%;
+    left: 50%;
+    display: inline;
+  }
+
+  .box select {
+    background-color: #0563af;
+    color: white;
+    padding: 12px;
+    width: 250px;
+    border: none;
+    font-size: 20px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+    -webkit-appearance: button;
+    appearance: button;
+    outline: none;
+  }
+
+  .box::before {
+    font-family: FontAwesome;
+    top: 0;
+    right: 0;
+    width: 20%;
+    height: 100%;
+    text-align: center;
+    font-size: 28px;
+    line-height: 45px;
+    color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(255, 255, 255, 0.1);
+    pointer-events: none;
+  }
+
+  .box:hover::before {
+    color: rgba(255, 255, 255, 0.6);
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .box select option {
+    padding: 30px;
+  }
 </style>
 
 <body>
@@ -61,15 +104,26 @@
     <li><a href="index.html">Home</a></li>
   </ul>
 
-  <h1>My Projects will Lie Here Says I</h1>
-  <div class="slidecontainer">
+  <h1>Algovisualizer</h1>
+  <div id="boardControls">
+    <div class="box">
+      <select id="tileType">
+        <option value="#282828" selected="selected">Wall</option>
+        <option value="#d79921">Start</option>
+        <option value="#cc241d">End</option>
+      </select>
+    </div>
+    <div class="box">
+      <select id="searchType">
+        <option value="dfs" selected="selected">Depth</option>
+        <option value="bfs">Breath</option>
+      </select>
+    </div>
+    <span id="soutput"></span>
     <input type="range" min="1" max="40" value="50" class="slider" id="boardSize">
-    <p id="soutput"></p>
   </div>
-  <!--<canvas id="tester" width="500" height="600"></canvas>!-->
-
-  <!--<script type="module" src="modules/board.js"></script>!-->
   <script src="main.js" type="module"></script>
+  <button type="button" id="start">Start</button>
 </body>
 
 </html>
