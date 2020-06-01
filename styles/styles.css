@@ -1,6 +1,6 @@
 /* Global Variables I Guess */
 :root {
-  --main-text-color: #cc241d;
+  --main-text-color: #B48EAD;
 }
 /* /Global Variables I Guess */
 
@@ -8,7 +8,8 @@
 
 body {
   /*background-image: url('../images/Wallpaper1.jpg');*/
-  background-color: #282828;
+  /* background-color: #282828; */
+  background-color: #ECEFF4;
 }
 
 h2 {
@@ -16,7 +17,7 @@ h2 {
   color: #d79921;
   font-size: 200%;
   font-family: Iosevka;
-  border-bottom: 4px solid #928374;
+  border-bottom: 4px solid #3B4252;
   margin-left: 100px;
   margin-right: 100px;
 }
@@ -26,8 +27,8 @@ h1 {
   font-family: Iosevka;
   text-align: center;
   font-size: 300%;
-  border: 3px solid #928374;
-  background-color: #3c3836;
+  border: 3px solid #3B4252;
+  background-color: #D8DEE9;
   border-radius: 10px;
   margin-left: 50px;
   margin-right: 50px;
@@ -55,14 +56,14 @@ h3 {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  border-bottom: 3px solid #928374;
+  border-bottom: 3px solid #3B4252;
 }
 
 li {
   float: right;
   font-family: Iosevka; 
   font-size: 20px;
-  color: #458588;
+  color: #BF616A;
 }
 
 .list {
@@ -74,11 +75,11 @@ li {
 li a {
   display: block;
   font-family: "Fira Code";
-  color: #98971a;
+  color: #8FBCBB;
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
-}
+}:window-inactive
 
 li a:hover {
   background-color: #3c3836;
@@ -94,4 +95,75 @@ li a:hover {
   text-align: center;
   padding: 14px 16px;
   font-size: 25px;
+}
+
+/* NavBar End */
+
+  /*Selection Styling*/
+.box {
+  top: 50%;
+  left: 50%;
+  padding: 10px;
+}
+
+.box select {
+  background-color: #5E81AC;
+  color: #D8DEE9;
+  padding: 12px;
+  width: 175px;
+  border: none;
+  font-size: 20px;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+  -webkit-appearance: button;
+  appearance: button;
+  outline: none;
+}
+
+.box::before {
+  font-family: FontAwesome;
+  top: 0;
+  right: 0;
+  width: 20%;
+  height: 100%;
+  text-align: center;
+  font-size: 28px;
+  line-height: 45px;
+  color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(255, 255, 255, 0.1);
+  pointer-events: none;
+}
+
+.box:hover::before {
+  color: rgba(255, 255, 255, 0.6);
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.box select option {
+  padding: 30px;
+}
+
+  /* Selection Styling End */
+
+.boardControls {
+  background-color: #D8DEE9;
+  border: 3px solid #3B4252;
+  width: 15%;
+  display: inline-block;
+}
+
+#start {
+  background-color: #5E81AC;
+  color: #D8DEE9;
+  border: none;
+  width: 175px;
+  margin: 10px 10px;
+  padding: 10px 10px;
+  font-size: 20px;
+}
+
+#mainScreen {
+  padding-left: 10px;
+  padding-right: 10px;
+  display: flex;
+  flex-direction: row;
 }

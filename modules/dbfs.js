@@ -3,7 +3,7 @@ import { myCanvas } from "./canvas.js";
 
 var searched = "#689d6a";
 var visited = "#458588";
-var found = "#d65d0e";
+var found = "#B48EAD";
 
 
 function legalPosition(row, col, board) {

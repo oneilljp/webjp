@@ -6,93 +6,6 @@
   <title>Projects</title>
   <link rel="stylesheet" href="styles/styles.css">
 </head>
-<style>
-  .slidecontainer {
-    width: 100%;
-  }
-
-  .slider {
-    -webkit-appearance: none;
-    appearance: none;
-    margin-left: 50px;
-    width: 95%;
-    height: 15px;
-    border-radius: 5px;
-    background: #d3d3d3;
-    outline: none;
-    opacity: 0.7;
-    -webkit-transition: .2s;
-    transition: opacity .2s;
-  }
-
-  .slider:hover {
-    opacity: 1;
-  }
-
-  /* Non Firefox Style */
-  .slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    /* Slider Handle Properties */
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-    background: #4CAF50;
-    /* Can use url('path to png') to put in an icon instead */
-    cursor: pointer;
-  }
-
-  /* Style for FireFox */
-  .slider::-moz-range-thumb {
-    width: 25px;
-    height: 25px;
-    background: #4CAF50;
-    cursor: pointer;
-  }
-
-  /*Selection Styling*/
-  .box {
-    top: 50%;
-    left: 50%;
-    display: inline;
-  }
-
-  .box select {
-    background-color: #0563af;
-    color: white;
-    padding: 12px;
-    width: 250px;
-    border: none;
-    font-size: 20px;
-    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
-    -webkit-appearance: button;
-    appearance: button;
-    outline: none;
-  }
-
-  .box::before {
-    font-family: FontAwesome;
-    top: 0;
-    right: 0;
-    width: 20%;
-    height: 100%;
-    text-align: center;
-    font-size: 28px;
-    line-height: 45px;
-    color: rgba(255, 255, 255, 0.5);
-    background-color: rgba(255, 255, 255, 0.1);
-    pointer-events: none;
-  }
-
-  .box:hover::before {
-    color: rgba(255, 255, 255, 0.6);
-    background-color: rgba(255, 255, 255, 0.2);
-  }
-
-  .box select option {
-    padding: 30px;
-  }
-</style>
 
 <body>
   <ul class="navbar">
@@ -105,25 +18,27 @@
   </ul>
 
   <h1>Algovisualizer</h1>
-  <div id="boardControls">
-    <div class="box">
-      <select id="tileType">
-        <option value="#282828" selected="selected">Wall</option>
-        <option value="#d79921">Start</option>
-        <option value="#cc241d">End</option>
-      </select>
-    </div>
-    <div class="box">
-      <select id="searchType">
-        <option value="dfs" selected="selected">Depth</option>
-        <option value="bfs">Breath</option>
-      </select>
-    </div>
-    <span id="soutput"></span>
-    <input type="range" min="1" max="40" value="50" class="slider" id="boardSize">
+  <div id="mainScreen">
+    <span class="boardControls">
+      <div class="box">
+        <select id="tileType">
+          <option value="#5E81AC" selected="selected">Wall</option>
+          <option value="#A3BE8C">Start</option>
+          <option value="#BF616A">End</option>
+        </select>
+      </div>
+      <div class="box">
+        <select id="searchType">
+          <option value="dfs" selected="selected">Depth</option>
+          <option value="bfs">Breath</option>
+        </select>
+      </div>
+      <button type="button" id="start">Start</button>
+      <!-- <span id="soutput"></span> -->
+      <!-- <input type="range" min="1" max="40" value="50" class="slider" id="boardSize"> -->
+    </span>
   </div>
   <script src="main.js" type="module"></script>
-  <button type="button" id="start">Start</button>
 </body>
 
 </html>

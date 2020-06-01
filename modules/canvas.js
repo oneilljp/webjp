@@ -1,7 +1,9 @@
 function create(id, parent, width, height) {
+    let bigDiv = document.getElementById('mainScreen');
     let divWrapper = document.createElement('div');
     let canvasElem = document.createElement('canvas');
-    parent.appendChild(divWrapper);
+    divWrapper.display = "inline";
+    bigDiv.appendChild(divWrapper);
     divWrapper.appendChild(canvasElem);
 
     divWrapper.id = id;
@@ -18,4 +20,4 @@ function create(id, parent, width, height) {
     };
 }
 
-export var myCanvas = create('myCanvas', document.body, window.innerWidth, 600);
+export var myCanvas = create('myCanvas', document.body, window.innerWidth - 280, 550);
