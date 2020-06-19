@@ -34,7 +34,7 @@ export function resize(first, elements, width, height) {
     var old = elements.slice(0);
     elements = [];
     var gap = 3;
-    var top_in = gap;
+    var top_in = 5;
     for (var i = 0; i < height; ++i) {
         elements.push([]);
         var left = 10;
@@ -51,6 +51,17 @@ export function resize(first, elements, width, height) {
         top_in += t_size + gap; // Ditto
     }
     return elements;
+}
+
+export function paint(elements, row, col, color) {
+    myCanvas.ctx.fillStyle = color;
+    myCanvas.ctx.fillRect(
+        elements[row][col].left,
+        elements[row][col].top,
+        elements[row][col].width,
+        elements[row][col].height
+    );
+    // Maybe do animated growth box here
 }
 
 export function draw(width, height, elements) {

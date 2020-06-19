@@ -1,5 +1,6 @@
 import { name, sEnum, Position, Tile, resize, draw } from './modules/tile.js';
 import { dbfs } from './modules/dbfs.js';
+import { dijkstra } from './modules/dijkstras.js';
 
 // Canvas Creation
 // var myCanvas = create('myCanvas', document.body, window.innerWidth, 600);
@@ -9,12 +10,12 @@ var colNum = 20;
 // Tile creation
 var elements = [];
 elements = resize(true, elements, rowNum, colNum);
-elements[0][0].color = elements[0][0].type = sEnum.Start;
-elements[0][elements[0].length - 1].color = elements[0][elements[0].length - 1].type = sEnum.End;
+elements[8][5].color = elements[0][0].type = sEnum.Start;
+elements[8][elements[0].length - 6].color = elements[0][elements[0].length - 1].type = sEnum.End;
 draw(window.innerWidth, 600, elements);
 
-var start = new Position(0, 0);
-var end = new Position(0, elements[0].length - 1);
+var start = new Position(8, 5);
+var end = new Position(8, elements[0].length - 6);
 
 
 // Slider Stuff
@@ -100,5 +101,8 @@ button.onclick = function () {
     }
     else if (s == "bfs") {
         dbfs(start, end, elements, false);
+    }
+    else if (s == "dijkstra") {
+        dijkstra(elements, start, end);
     }
 };

@@ -1,12 +1,12 @@
-import { sEnum, Position } from "./tile.js";
+import { sEnum, Position, paint } from "./tile.js";
 import { myCanvas } from "./canvas.js";
 
-var searched = "#689d6a";
-var visited = "#458588";
-var found = "#B48EAD";
+export var searched = "#689d6a";
+export var visited = "#458588";
+export var found = "#B48EAD";
 
 
-function legalPosition(row, col, board) {
+export function legalPosition(row, col, board) {
     return (row >= 0 && row < board.length && col >= 0 && col < board[0].length) &&
         board[row][col].type != sEnum.Wall;
 }
@@ -21,13 +21,7 @@ function checkPos(row, col, board, memo, deque, loc, dfs, end) {
         if (nextPos.row == end.row && nextPos.col == end.col) {
             throw new Error("End Found");
         }
-        myCanvas.ctx.fillStyle = searched;
-        myCanvas.ctx.fillRect(
-            board[row][col].left,
-            board[row][col].top,
-            board[row][col].width,
-            board[row][col].height
-        );
+        paint(board, row, col, searched);
     }
     else {
     }
@@ -37,8 +31,6 @@ function backColor(memo, elements, start, end) {
     var row = end.row;
     var col = end.col;
 
-    console.log(found);
-    myCanvas.ctx.fillStyle = found;
 
     var coloring = setInterval(c, 100);
     function c() {
@@ -47,6 +39,7 @@ function backColor(memo, elements, start, end) {
         }
         else {
             if (!(row == end.row && col == end.col)) {
+                paint(elements, row, col, found);
                 myCanvas.ctx.fillRect(
                     elements[row][col].left,
                     elements[row][col].top,
@@ -109,13 +102,7 @@ export function dbfs(start, end, board, dfs) {
             var current = new Position(deque[0].row, deque[0].col);
             deque.shift();
             if (!(current.row == start.row && current.col == start.col)) {
-                myCanvas.ctx.fillStyle = visited;
-                myCanvas.ctx.fillRect(
-                    board[current.row][current.col].left,
-                    board[current.row][current.col].top,
-                    board[current.row][current.col].width,
-                    board[current.row][current.col].height
-                );
+                paint(board, current.row, current.col, visited);
             }
 
             try {

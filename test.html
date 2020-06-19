@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script type='text/javascript'>//<![CDATA[ 
+        window.onload = function () {
+            function animate() {
+                var c = document.getElementById("myCanvas");
+                var ctx = c.getContext("2d");
+                ctx.save();
+                ctx.clearRect(0, 0, c.width, c.height);
+                if (i > 80) {
+                    i = 1;
+                }
+                if (i > 40) {
+                    ctx.beginPath();
+                    ctx.arc(50, 50, i - 40, 0, 2 * Math.PI, true);
+                    ctx.fillStyle = "#FF0033";
+                    ctx.fill();
+                }
+                i++;
+                ctx.restore();
+                setTimeout(animate, 10);
+            }
+            var i = 0;
+            animate();
+        }//]]>  
+    </script>
+</head>
+
+<body>
+    <canvas id="myCanvas" width="300" height="300"></canvas>
+</body>
+
+</html>

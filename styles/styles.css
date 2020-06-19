@@ -1,6 +1,6 @@
 /* Global Variables I Guess */
 :root {
-  --main-text-color: #B48EAD;
+  --main-text-color: #88C0D0;
 }
 /* /Global Variables I Guess */
 
@@ -35,7 +35,7 @@ h1 {
 }
 
 small {
-  color: #fb4934;
+  color: #8FBCBB;
   font-size: 30px;
 }
 
@@ -57,13 +57,14 @@ h3 {
   padding: 0;
   overflow: hidden;
   border-bottom: 3px solid #3B4252;
+  background-color: #434C5E;
 }
 
 li {
   float: right;
   font-family: Iosevka; 
   font-size: 20px;
-  color: #BF616A;
+  color: var(--main-text-color);
 }
 
 .list {
@@ -82,11 +83,11 @@ li a {
 }:window-inactive
 
 li a:hover {
-  background-color: #3c3836;
+  background-color: #4C566A;
 }
 
 .active {
-  background-color: #3c3836;
+  background-color: #4C566A;
 }
 
 .name {
