@@ -1,6 +1,6 @@
 /* Global Variables I Guess */
 :root {
-  --main-text-color: #88C0D0;
+  --main-text-color: #88c0d0;
 }
 /* /Global Variables I Guess */
 
@@ -9,7 +9,7 @@
 body {
   /*background-image: url('../images/Wallpaper1.jpg');*/
   /* background-color: #282828; */
-  background-color: #ECEFF4;
+  background-color: #eceff4;
 }
 
 h2 {
@@ -17,7 +17,7 @@ h2 {
   color: #d79921;
   font-size: 200%;
   font-family: Iosevka;
-  border-bottom: 4px solid #3B4252;
+  border-bottom: 4px solid #3b4252;
   margin-left: 100px;
   margin-right: 100px;
 }
@@ -27,15 +27,15 @@ h1 {
   font-family: Iosevka;
   text-align: center;
   font-size: 300%;
-  border: 3px solid #3B4252;
-  background-color: #D8DEE9;
+  border: 3px solid #3b4252;
+  background-color: #d8dee9;
   border-radius: 10px;
   margin-left: 50px;
   margin-right: 50px;
 }
 
 small {
-  color: #8FBCBB;
+  color: #8fbcbb;
   font-size: 30px;
 }
 
@@ -56,13 +56,13 @@ h3 {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  border-bottom: 3px solid #3B4252;
-  background-color: #434C5E;
+  border-bottom: 3px solid #3b4252;
+  background-color: #434c5e;
 }
 
 li {
   float: right;
-  font-family: Iosevka; 
+  font-family: Iosevka;
   font-size: 20px;
   color: var(--main-text-color);
 }
@@ -76,18 +76,17 @@ li {
 li a {
   display: block;
   font-family: "Fira Code";
-  color: #8FBCBB;
+  color: #8fbcbb;
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
-}:window-inactive
-
-li a:hover {
-  background-color: #4C566A;
+}
+:window-inactive li a:hover {
+  background-color: #4c566a;
 }
 
 .active {
-  background-color: #4C566A;
+  background-color: #4c566a;
 }
 
 .name {
@@ -100,7 +99,7 @@ li a:hover {
 
 /* NavBar End */
 
-  /*Selection Styling*/
+/*Selection Styling*/
 .box {
   top: 50%;
   left: 50%;
@@ -108,12 +107,13 @@ li a:hover {
 }
 
 .box select {
-  background-color: #5E81AC;
-  color: #D8DEE9;
+  background-color: #5e81ac;
+  color: #d8dee9;
   padding: 12px;
   width: 175px;
   border: none;
   font-size: 20px;
+  font-family: "Fira Code";
   box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
   -webkit-appearance: button;
   appearance: button;
@@ -143,18 +143,18 @@ li a:hover {
   padding: 30px;
 }
 
-  /* Selection Styling End */
+/* Selection Styling End */
 
 .boardControls {
-  background-color: #D8DEE9;
-  border: 3px solid #3B4252;
+  background-color: #d8dee9;
+  border: 3px solid #3b4252;
   width: 15%;
   display: inline-block;
 }
 
 #start {
-  background-color: #5E81AC;
-  color: #D8DEE9;
+  background-color: #5e81ac;
+  color: #d8dee9;
   border: none;
   width: 175px;
   margin: 10px 10px;

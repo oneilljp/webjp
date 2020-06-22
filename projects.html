@@ -1,45 +1,46 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Projects</title>
+    <link rel="stylesheet" href="styles/styles.css" />
+  </head>
 
-<head>
-  <meta charset="utf-8">
-  <title>Projects</title>
-  <link rel="stylesheet" href="styles/styles.css">
-</head>
+  <body>
+    <ul class="navbar">
+      <li class="name">
+        &ltJohn Paul O'Neill/&gt
+      </li>
+      <li><a href="resume.html">Resume</a></li>
+      <li><a class="active" href="projects.html">Projects</a></li>
+      <li><a href="index.html">Home</a></li>
+    </ul>
 
-<body>
-  <ul class="navbar">
-    <li class="name">
-      &ltJohn Paul O'Neill/&gt
-    </li>
-    <li><a href="resume.html">Resume</a></li>
-    <li><a class="active" href="projects.html">Projects</a></li>
-    <li><a href="index.html">Home</a></li>
-  </ul>
-
-  <h1>Algovisualizer</h1>
-  <div id="mainScreen">
-    <span class="boardControls">
-      <div class="box">
-        <select id="tileType">
-          <option value="#5E81AC" selected="selected">Wall</option>
-          <option value="#A3BE8C">Start</option>
-          <option value="#BF616A">End</option>
-        </select>
-      </div>
-      <div class="box">
-        <select id="searchType">
-          <option value="dfs" selected="selected">Depth</option>
-          <option value="bfs">Breath</option>
-          <option value="dijkstra">Dijkstra's</option>
-        </select>
-      </div>
-      <button type="button" id="start">Start</button>
-      <!-- <span id="soutput"></span> -->
-      <!-- <input type="range" min="1" max="40" value="50" class="slider" id="boardSize"> -->
-    </span>
-  </div>
-  <script src="main.js" type="module"></script>
-</body>
-
+    <h1>Algovisualizer</h1>
+    <div id="mainScreen">
+      <span class="boardControls">
+        <div class="box">
+          <select id="tileType">
+            <option value="#5E81AC" selected="selected">Wall</option>
+            <option value="#A3BE8C">Start</option>
+            <option value="#BF616A">End</option>
+            <option value="#EBCB8B">Key</option>
+          </select>
+        </div>
+        <div class="box">
+          <select id="searchType">
+            <option value="dfs" selected="selected">Depth</option>
+            <option value="bfs">Breath</option>
+            <option value="dijkstra">Dijkstra's</option>
+          </select>
+        </div>
+        <button type="button" id="start">Start</button>
+        <p>Discovered</p>
+        <p>Visited</p>
+        <!-- <span id="soutput"></span> -->
+        <!-- <input type="range" min="1" max="40" value="50" class="slider" id="boardSize"> -->
+      </span>
+    </div>
+    <script src="main.js" type="module"></script>
+  </body>
 </html>
