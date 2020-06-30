@@ -168,3 +168,8 @@ li a {
   display: flex;
   flex-direction: row;
 }
+
+.label {
+  font-family: "Fira Code";
+  margin-left: 12px;
+}
