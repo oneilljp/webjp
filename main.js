@@ -1,5 +1,5 @@
 import { name, sEnum, Position, Tile, resize, draw } from "./modules/tile.js";
-import { dbfs } from "./modules/dbfs.js";
+import { dbfs, visited, searched, found } from "./modules/dbfs.js";
 import { dijkstra } from "./modules/dijkstras.js";
 
 // Canvas Creation
@@ -126,3 +126,53 @@ button.onclick = function () {
     dijkstra(elements, start, end);
   }
 };
+
+// Label Coloring
+
+// var dCan = document.getElementById("dColor");
+// var dctx = dCan.getContext("2d");
+// dctx.fillStyle = visited;
+// dctx.fillRect(0, 0, 24, 24);
+
+var vCan = document.getElementById("vColor");
+var vctx = vCan.getContext("2d");
+
+// Start Node
+vctx.fillStyle = sEnum.Start;
+vctx.fillRect(10, 0, 24, 24);
+vctx.font = "14px Fira Code";
+vctx.fillStyle = sEnum.Start;
+vctx.textAllign = "center";
+vctx.fillText("Start Node", 44, 20);
+
+// End Node
+vctx.fillStyle = sEnum.End;
+vctx.fillRect(10, 30, 24, 24);
+vctx.font = "14px Fira Code";
+vctx.fillStyle = sEnum.End;
+vctx.textAllign = "center";
+vctx.fillText("End Node", 44, 50);
+
+// Searched
+vctx.fillStyle = searched;
+vctx.fillRect(10, 60, 24, 24);
+vctx.font = "14px Fira Code";
+vctx.fillStyle = searched;
+vctx.textAllign = "center";
+vctx.fillText("Searched", 44, 80);
+
+// Visited
+vctx.fillStyle = visited;
+vctx.fillRect(10, 90, 24, 24);
+vctx.font = "14px Fira Code";
+vctx.fillStyle = visited;
+vctx.textAllign = "center";
+vctx.fillText("Visited", 44, 110);
+
+// Path-To
+vctx.fillStyle = found;
+vctx.fillRect(10, 120, 24, 24);
+vctx.font = "14px Fira Code";
+vctx.fillStyle = found;
+vctx.textAllign = "center";
+vctx.fillText("Path-To", 44, 140);

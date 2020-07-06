@@ -34,7 +34,7 @@ function backColor(memo, elements, start, end) {
   var row = end.row;
   var col = end.col;
 
-  var coloring = setInterval(c, 100);
+  var coloring = setInterval(c, 30);
   function c() {
     if (row == start.row && col == start.col) {
       clearInterval(coloring);
@@ -94,7 +94,7 @@ export function dbfs(start, end, board, dfs) {
   memo[start.row][start.col].discovered = true;
   var deque = [start];
 
-  var searcher = setInterval(s, 100);
+  var searcher = setInterval(s, 25);
 
   // while (deque.length != 0) {
   function s() {
