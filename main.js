@@ -119,11 +119,11 @@ button.onclick = function () {
   var s = searchType.value;
 
   if (s == "dfs") {
-    dbfs(start, end, elements, true);
+    dbfs(start, end, key, elements, true);
   } else if (s == "bfs") {
-    dbfs(start, end, elements, false);
+    dbfs(start, end, key, elements, false);
   } else if (s == "dijkstra") {
-    dijkstra(elements, start, end);
+    dijkstra(elements, start, end, key);
   }
 };
 
@@ -138,41 +138,72 @@ var vCan = document.getElementById("vColor");
 var vctx = vCan.getContext("2d");
 
 // Start Node
-vctx.fillStyle = sEnum.Start;
-vctx.fillRect(10, 0, 24, 24);
-vctx.font = "14px Fira Code";
-vctx.fillStyle = sEnum.Start;
-vctx.textAllign = "center";
-vctx.fillText("Start Node", 44, 20);
+var refColors = [
+  sEnum.Start,
+  sEnum.End,
+  sEnum.Key,
+  sEnum.Wall,
+  searched,
+  visited,
+  found,
+];
+var refLabels = [
+  "Start Node",
+  "End Node",
+  "Key",
+  "Wall",
+  "Searched",
+  "Visited",
+  "Path-To",
+];
 
-// End Node
-vctx.fillStyle = sEnum.End;
-vctx.fillRect(10, 30, 24, 24);
-vctx.font = "14px Fira Code";
-vctx.fillStyle = sEnum.End;
-vctx.textAllign = "center";
-vctx.fillText("End Node", 44, 50);
+vctx.fillStyle = "#4C566A";
+vctx.fillRect(10, 0, 192, 250);
 
-// Searched
-vctx.fillStyle = searched;
-vctx.fillRect(10, 60, 24, 24);
-vctx.font = "14px Fira Code";
-vctx.fillStyle = searched;
-vctx.textAllign = "center";
-vctx.fillText("Searched", 44, 80);
+for (var i = 0; i < refColors.length; ++i) {
+  vctx.fillStyle = refColors[i];
+  vctx.fillRect(20, 10 + 30 * i, 24, 24);
+  vctx.font = "14px Fira Code";
+  vctx.textAllign = "center";
+  vctx.fillStyle = "#d8dee9";
+  vctx.fillText(refLabels[i], 54, 28 + 30 * i);
+}
 
-// Visited
-vctx.fillStyle = visited;
-vctx.fillRect(10, 90, 24, 24);
-vctx.font = "14px Fira Code";
-vctx.fillStyle = visited;
-vctx.textAllign = "center";
-vctx.fillText("Visited", 44, 110);
+// vctx.fillStyle = sEnum.Start;
+// vctx.fillRect(10, 0, 24, 24);
+// vctx.font = "14px Fira Code";
+// vctx.fillStyle = sEnum.Start;
+// vctx.textAllign = "center";
+// vctx.fillText("Start Node", 44, 20);
 
-// Path-To
-vctx.fillStyle = found;
-vctx.fillRect(10, 120, 24, 24);
-vctx.font = "14px Fira Code";
-vctx.fillStyle = found;
-vctx.textAllign = "center";
-vctx.fillText("Path-To", 44, 140);
+// // End Node
+// vctx.fillStyle = sEnum.End;
+// vctx.fillRect(10, 30, 24, 24);
+// vctx.font = "14px Fira Code";
+// vctx.fillStyle = sEnum.End;
+// vctx.textAllign = "center";
+// vctx.fillText("End Node", 44, 50);
+
+// // Searched
+// vctx.fillStyle = searched;
+// vctx.fillRect(10, 60, 24, 24);
+// vctx.font = "14px Fira Code";
+// vctx.fillStyle = searched;
+// vctx.textAllign = "center";
+// vctx.fillText("Searched", 44, 80);
+
+// // Visited
+// vctx.fillStyle = visited;
+// vctx.fillRect(10, 90, 24, 24);
+// vctx.font = "14px Fira Code";
+// vctx.fillStyle = visited;
+// vctx.textAllign = "center";
+// vctx.fillText("Visited", 44, 110);
+
+// // Path-To
+// vctx.fillStyle = found;
+// vctx.fillRect(10, 120, 24, 24);
+// vctx.font = "14px Fira Code";
+// vctx.fillStyle = found;
+// vctx.textAllign = "center";
+// vctx.fillText("Path-To", 44, 140);

@@ -95,7 +95,7 @@ function paintPath(board, memo, start, end) {
   }
 }
 
-export function dijkstra(board, start, end) {
+export function dijkstra(board, start, end, key) {
   var memo = setupMemo(board, start);
 
   var startPos = new Object();

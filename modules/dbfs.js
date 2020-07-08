@@ -71,7 +71,7 @@ function backColor(memo, elements, start, end) {
 
 // DFS = Stack BFS = Queue
 
-export function dbfs(start, end, board, dfs) {
+export function dbfs(start, end, key, board, dfs) {
   console.log(board[0].length + " " + typeof end);
   if (
     !legalPosition(start.row, start.col, board) ||
