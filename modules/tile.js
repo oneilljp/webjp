@@ -2,11 +2,12 @@ import { myCanvas } from "./canvas.js";
 export const name = "tile";
 
 export var sEnum = {
-  Wall: "#5E81AC",
+  Wall: "#2E3440",
   Empty: "#E5E9F0",
   Start: "#A3BE8C",
   End: "#BF616A",
   Key: "#EBCB8B",
+  Weight: "#D08770",
 };
 
 export class Tile {
@@ -66,19 +67,61 @@ export function resize(first, elements, width, height) {
 }
 
 export function paint(elements, row, col, color) {
+  var len = elements[row][col].height;
+  // Original Working painting
+  // myCanvas.ctx.fillStyle = color;
+  // myCanvas.ctx.fillRect(
+  //   elements[row][col].left,
+  //   elements[row][col].top,
+  //   elements[row][col].width,
+  //   elements[row][col].height
+  // );
+  // Maybe do animated growth box here
+  var speed = document.getElementById("speed").value * 2;
   myCanvas.ctx.fillStyle = color;
   myCanvas.ctx.fillRect(
-    elements[row][col].left,
-    elements[row][col].top,
-    elements[row][col].width,
-    elements[row][col].height
+    elements[row][col].left + 9,
+    elements[row][col].top + 9,
+    elements[row][col].width / 4,
+    elements[row][col].height / 4
   );
-  // Maybe do animated growth box here
+
+  setTimeout(function () {
+    myCanvas.ctx.fillStyle = color;
+    myCanvas.ctx.fillRect(
+      elements[row][col].left + len / 4,
+      elements[row][col].top + len / 4,
+      elements[row][col].width / 2,
+      elements[row][col].height / 2
+    );
+  }, 20 * speed);
+
+  setTimeout(function () {
+    myCanvas.ctx.fillStyle = color;
+    myCanvas.ctx.fillRect(
+      elements[row][col].left + len / 8,
+      elements[row][col].top + len / 8,
+      (elements[row][col].width * 3) / 4,
+      (elements[row][col].height * 3) / 4
+    );
+  }, 40 * speed);
+
+  setTimeout(function () {
+    myCanvas.ctx.fillStyle = color;
+    myCanvas.ctx.fillRect(
+      elements[row][col].left,
+      elements[row][col].top,
+      elements[row][col].width,
+      elements[row][col].height
+    );
+  }, 60 * speed);
 }
 
 export function draw(width, height, elements) {
   myCanvas.ctx.fillStyle = "#4C566A";
   myCanvas.ctx.fillRect(0, 0, width, height);
+
+  var start;
 
   for (var i = 0; i < elements.length; ++i) {
     for (var j = 0; j < elements[i].length; ++j) {
@@ -89,6 +132,15 @@ export function draw(width, height, elements) {
         elements[i][j].width,
         elements[i][j].height
       );
+      if (elements[i][j].color == sEnum.Start) {
+        start = elements[i][j];
+      }
     }
   }
+
+  // var sIcon = new Image();
+  // sIcon.src = "../images/start1.png";
+  // sIcon.onload = () => {
+  //   myCanvas.ctx.drawImage(sIcon, start.left, start.top);
+  // };
 }

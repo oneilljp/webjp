@@ -5,6 +5,9 @@ export var searched = "#689d6a";
 export var visited = "#458588";
 export var found = "#B48EAD";
 
+var memo = [];
+var deque = [];
+
 export function legalPosition(row, col, board) {
   return (
     row >= 0 &&
@@ -15,7 +18,7 @@ export function legalPosition(row, col, board) {
   );
 }
 
-function checkPos(row, col, board, memo, deque, loc, dfs, end) {
+function checkPos(row, col, board, loc, dfs, end) {
   if (legalPosition(row, col, board) && !memo[row][col].discovered) {
     memo[row][col].discovered = true;
     memo[row][col].prev = loc;
@@ -30,23 +33,17 @@ function checkPos(row, col, board, memo, deque, loc, dfs, end) {
   }
 }
 
-function backColor(memo, elements, start, end) {
+function backColor(elements, start, end, speed) {
   var row = end.row;
   var col = end.col;
 
-  var coloring = setInterval(c, 30);
+  var coloring = setInterval(c, 20 * speed);
   function c() {
     if (row == start.row && col == start.col) {
       clearInterval(coloring);
     } else {
       if (!(row == end.row && col == end.col)) {
         paint(elements, row, col, found);
-        myCanvas.ctx.fillRect(
-          elements[row][col].left,
-          elements[row][col].top,
-          elements[row][col].width,
-          elements[row][col].height
-        );
       }
       switch (memo[row][col].prev) {
         case "s":
@@ -72,6 +69,7 @@ function backColor(memo, elements, start, end) {
 // DFS = Stack BFS = Queue
 
 export function dbfs(start, end, key, board, dfs) {
+  var speed = document.getElementById("speed").value;
   console.log(board[0].length + " " + typeof end);
   if (
     !legalPosition(start.row, start.col, board) ||
@@ -81,7 +79,7 @@ export function dbfs(start, end, key, board, dfs) {
     return;
   }
 
-  var memo = [];
+  memo = [];
   for (var i = 0; i < board.length; ++i) {
     memo.push([]);
     for (var j = 0; j < board[0].length; ++j) {
@@ -92,11 +90,10 @@ export function dbfs(start, end, key, board, dfs) {
   }
 
   memo[start.row][start.col].discovered = true;
-  var deque = [start];
+  deque = [start];
 
-  var searcher = setInterval(s, 25);
+  var searcher = setInterval(s, 25 * speed);
 
-  // while (deque.length != 0) {
   function s() {
     if (deque.length == 0) {
       clearInterval(searcher);
@@ -109,64 +106,29 @@ export function dbfs(start, end, key, board, dfs) {
 
       try {
         setTimeout(
-          checkPos(
-            current.row - 1,
-            current.col,
-            board,
-            memo,
-            deque,
-            "s",
-            dfs,
-            end
-          ),
+          checkPos(current.row - 1, current.col, board, "s", dfs, end),
           1000
         );
         setTimeout(
-          checkPos(
-            current.row,
-            current.col + 1,
-            board,
-            memo,
-            deque,
-            "w",
-            dfs,
-            end
-          ),
+          checkPos(current.row, current.col + 1, board, "w", dfs, end),
           2000
         );
         setTimeout(
-          checkPos(
-            current.row + 1,
-            current.col,
-            board,
-            memo,
-            deque,
-            "n",
-            dfs,
-            end
-          ),
+          checkPos(current.row + 1, current.col, board, "n", dfs, end),
           3000
         );
         setTimeout(
-          checkPos(
-            current.row,
-            current.col - 1,
-            board,
-            memo,
-            deque,
-            "e",
-            dfs,
-            end
-          ),
+          checkPos(current.row, current.col - 1, board, "e", dfs, end),
           4000
         );
       } catch (e) {
         console.log(e.message);
-        backColor(memo, board, start, end);
+        backColor(board, start, end, speed);
         clearInterval(searcher);
       }
     }
   }
 
   console.log("End of Search");
+  return false;
 }

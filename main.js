@@ -2,8 +2,6 @@ import { name, sEnum, Position, Tile, resize, draw } from "./modules/tile.js";
 import { dbfs, visited, searched, found } from "./modules/dbfs.js";
 import { dijkstra } from "./modules/dijkstras.js";
 
-// Canvas Creation
-// var myCanvas = create('myCanvas', document.body, window.innerWidth, 600);
 var rowNum = 60;
 var colNum = 20;
 
@@ -20,29 +18,30 @@ var start = new Position(8, 5);
 var end = new Position(8, elements[0].length - 6);
 var key = false;
 
-// Slider Stuff
-// let slider = document.getElementById("boardSize");
-// var output = document.getElementById("soutput");
-// output.innerHTML = slider.value;
-
-// slider.oninput = function () {
-// output.innerHTML = this.value;
 elements = resize(false, elements, rowNum, colNum);
 draw(window.innerWidth, 600, elements);
-//draw();
-// };
 
 // CLick Listener
 var elem = document.getElementById(myCanvas.id),
   elemLeft = elem.offsetLeft + elem.clientLeft,
   elemTop = elem.offsetTop + elem.clientTop;
 
+var clicked = 0,
+  lastX = -1,
+  lastY = -1;
+
 var listener = function (event) {
+  if (!clicked && event.type == "mousemove") {
+    return;
+  }
   var x = event.pageX - elemLeft,
     y = event.pageY - elemTop;
 
   for (var i = 0; i < elements.length; ++i) {
     for (var j = 0; j < elements[i].length; ++j) {
+      if (i == lastX && j == lastY && event.type == "mousemove") {
+        continue;
+      }
       if (
         y > elements[i][j].top &&
         y < elements[i][j].top + elements[i][j].height &&
@@ -62,6 +61,12 @@ var listener = function (event) {
         }
 
         if (type === sEnum.Wall) {
+          if (elements[i][j].type === type) {
+            elements[i][j].color = elements[i][j].type = sEnum.Empty;
+          } else {
+            elements[i][j].color = elements[i][j].type = type;
+          }
+        } else if (type === sEnum.Weight) {
           if (elements[i][j].type === type) {
             elements[i][j].color = elements[i][j].type = sEnum.Empty;
           } else {
@@ -99,49 +104,42 @@ var listener = function (event) {
           end.col = j;
         }
 
+        lastX = i;
+        lastY = j;
         draw(window.innerWidth, 600, elements);
       }
     }
   }
 };
 
-// elem.addEventListener(
-//     "click",
-//     listener,
-//     false
-// );
-
+elem.addEventListener("mousemove", listener, false);
 elem.addEventListener("click", listener, false);
+elem.addEventListener(
+  "mousedown",
+  () => {
+    ++clicked;
+  },
+  false
+);
+elem.addEventListener(
+  "mouseup",
+  () => {
+    --clicked;
+    lastX = -1;
+    lastY = -1;
+  },
+  false
+);
 
-var button = document.getElementById("start");
-button.onclick = function () {
-  var searchType = document.getElementById("searchType");
-  var s = searchType.value;
-
-  if (s == "dfs") {
-    dbfs(start, end, key, elements, true);
-  } else if (s == "bfs") {
-    dbfs(start, end, key, elements, false);
-  } else if (s == "dijkstra") {
-    dijkstra(elements, start, end, key);
-  }
-};
-
-// Label Coloring
-
-// var dCan = document.getElementById("dColor");
-// var dctx = dCan.getContext("2d");
-// dctx.fillStyle = visited;
-// dctx.fillRect(0, 0, 24, 24);
-
+// BEG Reference Label Coloring
 var vCan = document.getElementById("vColor");
 var vctx = vCan.getContext("2d");
 
-// Start Node
 var refColors = [
   sEnum.Start,
   sEnum.End,
   sEnum.Key,
+  sEnum.Weight,
   sEnum.Wall,
   searched,
   visited,
@@ -151,6 +149,7 @@ var refLabels = [
   "Start Node",
   "End Node",
   "Key",
+  "Weighted Tile",
   "Wall",
   "Searched",
   "Visited",
@@ -169,41 +168,26 @@ for (var i = 0; i < refColors.length; ++i) {
   vctx.fillText(refLabels[i], 54, 28 + 30 * i);
 }
 
-// vctx.fillStyle = sEnum.Start;
-// vctx.fillRect(10, 0, 24, 24);
-// vctx.font = "14px Fira Code";
-// vctx.fillStyle = sEnum.Start;
-// vctx.textAllign = "center";
-// vctx.fillText("Start Node", 44, 20);
+// END Reference Label Coloring
 
-// // End Node
-// vctx.fillStyle = sEnum.End;
-// vctx.fillRect(10, 30, 24, 24);
-// vctx.font = "14px Fira Code";
-// vctx.fillStyle = sEnum.End;
-// vctx.textAllign = "center";
-// vctx.fillText("End Node", 44, 50);
+// BEG Alg Execution
+var button = document.getElementById("start");
+button.onclick = function () {
+  var searchType = document.getElementById("searchType");
+  var s = searchType.value;
 
-// // Searched
-// vctx.fillStyle = searched;
-// vctx.fillRect(10, 60, 24, 24);
-// vctx.font = "14px Fira Code";
-// vctx.fillStyle = searched;
-// vctx.textAllign = "center";
-// vctx.fillText("Searched", 44, 80);
-
-// // Visited
-// vctx.fillStyle = visited;
-// vctx.fillRect(10, 90, 24, 24);
-// vctx.font = "14px Fira Code";
-// vctx.fillStyle = visited;
-// vctx.textAllign = "center";
-// vctx.fillText("Visited", 44, 110);
-
-// // Path-To
-// vctx.fillStyle = found;
-// vctx.fillRect(10, 120, 24, 24);
-// vctx.font = "14px Fira Code";
-// vctx.fillStyle = found;
-// vctx.textAllign = "center";
-// vctx.fillText("Path-To", 44, 140);
+  if (s == "dfs") {
+    draw(window.innerWidth, 600, elements);
+    dbfs(start, end, key, elements, true);
+  } else if (s == "bfs") {
+    draw(window.innerWidth, 600, elements);
+    dbfs(start, end, key, elements, false);
+  } else if (s == "dijkstra") {
+    draw(window.innerWidth, 600, elements);
+    dijkstra(elements, start, end, false, key);
+  } else if (s == "astar") {
+    draw(window.innerWidth, 600, elements);
+    dijkstra(elements, start, end, true, key);
+  }
+};
+// END Alg Execution

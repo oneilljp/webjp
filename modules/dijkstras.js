@@ -1,4 +1,4 @@
-import { paint } from "./tile.js";
+import { paint, sEnum } from "./tile.js";
 import { legalPosition, visited, searched, found } from "./dbfs.js";
 // Keep memo backlog of nodes to check if discovered, log shortest distance
 // And log parent of shortest distance
@@ -8,10 +8,11 @@ import { legalPosition, visited, searched, found } from "./dbfs.js";
 // used less for heaps and whatnot. pass memo into this function so that
 // we can keep the queue just as coords
 
-// NEED TO ADD PAINTING
+var memo = [];
+var star = false;
 
 function setupMemo(board, start) {
-  var memo = [];
+  memo = [];
   for (var i = 0; i < board.length; ++i) {
     memo.push([]);
     for (var j = 0; j < board[0].length; ++j) {
@@ -25,65 +26,112 @@ function setupMemo(board, start) {
   memo[start.row][start.col].distance = 0;
   memo[start.row][start.col].parent = " ";
   memo[start.row][start.col].discovered = true;
-
-  return memo;
 }
 
-function addPos(memo, board, locations, current, nextPos, end) {
-  if (
-    !memo[nextPos.row][nextPos.col].discovered ||
-    memo[nextPos.row][nextPos.col].distance >
-      memo[current.row][current.col].distance + 1
-  ) {
-    memo[nextPos.row][nextPos.col].discovered = true;
-    memo[nextPos.row][nextPos.col].distance =
-      memo[current.row][current.col].distance + 1;
-    memo[nextPos.row][nextPos.col].parent = current;
-    locations.push(nextPos);
+// ASTAR COST CALCULATION
 
-    if (nextPos.row == end.row && nextPos.col == end.col) {
-      throw new Error("End Found");
-    } else {
-      paint(board, nextPos.row, nextPos.col, searched);
+function acost(board, current, next, end) {
+  var gcost, fcost;
+  if (board[current.row][current.col].type === sEnum.Weight) {
+    gcost = memo[current.row][current.col].distance + 5;
+  } else {
+    gcost = memo[current.row][current.col].distance + 1;
+  }
+
+  // Calculate F Cost
+  // Estimate distance from End using Basic Distance formula
+  // fcost = Math.sqrt(
+  //   Math.pow(end.row - next.row, 2) + Math.pow(end.col - next.col, 2)
+  // );
+
+  fcost = Math.abs(end.row - next.row) + Math.abs(end.col - next.col);
+
+  // Return overall h cost
+  return gcost + fcost;
+}
+
+// Add Position to Visitable Locations
+
+function addPos(board, locations, current, nextPos, end) {
+  if (star) {
+    var cost = acost(board, current, nextPos, end);
+
+    if (
+      !memo[nextPos.row][nextPos.col].discovered ||
+      memo[nextPos.row][nextPos.col].distance > cost
+    ) {
+      memo[nextPos.row][nextPos.col].discovered = true;
+      memo[nextPos.row][nextPos.col].distance = cost;
+      memo[nextPos.row][nextPos.col].parent = current;
+      locations.push(nextPos);
+
+      if (nextPos.row == end.row && nextPos.col == end.col) {
+        throw new Error("End Found");
+      } else {
+        paint(board, nextPos.row, nextPos.col, searched);
+      }
+    }
+  } else {
+    // Weighted Tiles are More Costly to Traverse
+    var cost = board[current.row][current.col].type === sEnum.Weight ? 5 : 1;
+
+    if (
+      !memo[nextPos.row][nextPos.col].discovered ||
+      memo[nextPos.row][nextPos.col].distance >
+        memo[current.row][current.col].distance + cost
+    ) {
+      memo[nextPos.row][nextPos.col].discovered = true;
+      memo[nextPos.row][nextPos.col].distance =
+        memo[current.row][current.col].distance + cost;
+      memo[nextPos.row][nextPos.col].parent = current;
+      locations.push(nextPos);
+
+      if (nextPos.row == end.row && nextPos.col == end.col) {
+        throw new Error("End Found");
+      } else {
+        paint(board, nextPos.row, nextPos.col, searched);
+      }
     }
   }
 }
 
-function checkPos(current, locations, memo, board, end) {
+// Search Locations arround current tile
+
+function checkPos(current, locations, board, end) {
   if (legalPosition(current.row - 1, current.col, board)) {
     var nextPos = new Object();
     nextPos.row = current.row - 1;
     nextPos.col = current.col;
 
-    addPos(memo, board, locations, current, nextPos, end);
+    addPos(board, locations, current, nextPos, end);
   } // check north
   if (legalPosition(current.row, current.col + 1, board)) {
     var nextPos = new Object();
     nextPos.row = current.row;
     nextPos.col = current.col + 1;
 
-    addPos(memo, board, locations, current, nextPos, end);
+    addPos(board, locations, current, nextPos, end);
   } // check east
   if (legalPosition(current.row + 1, current.col, board)) {
     var nextPos = new Object();
     nextPos.row = current.row + 1;
     nextPos.col = current.col;
 
-    addPos(memo, board, locations, current, nextPos, end);
+    addPos(board, locations, current, nextPos, end);
   } // check south
   if (legalPosition(current.row, current.col - 1, board)) {
     var nextPos = new Object();
     nextPos.row = current.row;
     nextPos.col = current.col - 1;
 
-    addPos(memo, board, locations, current, nextPos, end);
+    addPos(board, locations, current, nextPos, end);
   } // check west
 }
 
-function paintPath(board, memo, start, end) {
+function paintPath(board, start, end, speed) {
   var prev = memo[end.row][end.col].parent;
 
-  var painter = setInterval(p, 30);
+  var painter = setInterval(p, 20 * speed);
 
   function p() {
     if (prev.row == start.row && prev.col == start.col) {
@@ -95,8 +143,10 @@ function paintPath(board, memo, start, end) {
   }
 }
 
-export function dijkstra(board, start, end, key) {
-  var memo = setupMemo(board, start);
+export function dijkstra(board, start, end, astar, key) {
+  setupMemo(board, start);
+
+  star = astar;
 
   var startPos = new Object();
   startPos.row = start.row;
@@ -104,7 +154,9 @@ export function dijkstra(board, start, end, key) {
 
   var locations = [startPos];
 
-  var searcher = setInterval(s, 25);
+  var speed = document.getElementById("speed").value;
+
+  var searcher = setInterval(s, 25 * speed);
 
   function s() {
     if (locations.length == 0) {
@@ -117,10 +169,10 @@ export function dijkstra(board, start, end, key) {
       }
 
       try {
-        checkPos(current, locations, memo, board, end);
+        checkPos(current, locations, board, end);
       } catch (e) {
         console.log(e.message);
-        paintPath(board, memo, start, end);
+        paintPath(board, start, end, speed);
         // TODO Paint Path Here
         clearInterval(searcher);
       }
@@ -131,4 +183,5 @@ export function dijkstra(board, start, end, key) {
       }); // Sort so that the shortest distance buddy is at the front
     }
   }
+  return false;
 }

@@ -27,10 +27,11 @@
       <span class="boardControls">
         <div class="box">
           <select id="tileType">
-            <option value="#5E81AC" selected="selected">Wall</option>
+            <option value="#2E3440" selected="selected">Wall</option>
             <option value="#A3BE8C">Start</option>
             <option value="#BF616A">End</option>
-            <option value="#EBCB8B">Key</option>
+            <!-- <option value="#EBCB8B">Key</option> -->
+            <option value="#D08770">Weight</option>
           </select>
         </div>
         <div class="box">
@@ -38,6 +39,14 @@
             <option value="dfs" selected="selected">Depth</option>
             <option value="bfs">Breath</option>
             <option value="dijkstra">Dijkstra's</option>
+            <option value="astar">A*</option>
+          </select>
+        </div>
+        <div class="box">
+          <select id="speed">
+            <option value="4">Slow</option>
+            <option value="2" selected="selected">Normal</option>
+            <option value="1">Fast</option>
           </select>
         </div>
         <button type="button" id="start">Start</button>
