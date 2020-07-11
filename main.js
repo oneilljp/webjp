@@ -1,6 +1,7 @@
 import { sEnum, Position, Tile, resize, draw } from "./modules/tile.js";
 import { dbfs, visited, searched, found } from "./modules/dbfs.js";
 import { dijkstra } from "./modules/dijkstras.js";
+import { Prims } from "./modules/mazes.js";
 
 // TODO MAKE RECOLOR FUNCTION!!!!!
 
@@ -13,9 +14,8 @@ elements = resize(true, elements);
 var start = new Position(elements.length / 2 - 1, 5);
 var end = new Position(elements.length / 2 - 1, elements[0].length - 6);
 
-elements[start.row][start.col].color = elements[start.row][start.col].type =
-  sEnum.Start;
-elements[end.row][end.col].color = elements[end.row][end.col].type = sEnum.End;
+elements[start.row][start.col].color = sEnum.Start;
+elements[end.row][end.col].color = sEnum.End;
 draw(window.innerWidth, 600, elements);
 
 var key = false;
@@ -29,10 +29,8 @@ window.onresize = (event) => {
   start = new Position(elements.length / 2 - 1, 5);
   end = new Position(elements.length / 2 - 1, elements[0].length - 6);
 
-  elements[start.row][start.col].color = elements[start.row][start.col].type =
-    sEnum.Start;
-  elements[end.row][end.col].color = elements[end.row][end.col].type =
-    sEnum.End;
+  elements[start.row][start.col].color = sEnum.Start;
+  elements[end.row][end.col].color = sEnum.End;
 
   draw(window.innerWidth, 600, elements);
 };
@@ -77,45 +75,41 @@ var listener = function (event) {
         }
 
         if (type === sEnum.Wall) {
-          if (elements[i][j].type === type) {
-            elements[i][j].color = elements[i][j].type = sEnum.Empty;
+          if (elements[i][j].color === type) {
+            elements[i][j].color = sEnum.Empty;
           } else {
-            elements[i][j].color = elements[i][j].type = type;
+            elements[i][j].color = type;
           }
         } else if (type === sEnum.Weight) {
-          if (elements[i][j].type === type) {
-            elements[i][j].color = elements[i][j].type = sEnum.Empty;
+          if (elements[i][j].color === type) {
+            elements[i][j].color = sEnum.Empty;
           } else {
-            elements[i][j].color = elements[i][j].type = type;
+            elements[i][j].color = type;
           }
         } else if (type == sEnum.Start) {
-          elements[i][j].color = elements[i][j].type = sEnum.Start;
-          elements[start.row][start.col].color = elements[start.row][
-            start.col
-          ].type = sEnum.Empty;
+          elements[i][j].color = sEnum.Start;
+          elements[start.row][start.col].color = sEnum.Empty;
           start.row = i;
           start.col = j;
         } else if (type == sEnum.Key) {
           if (key && key.row == i && key.col == j) {
             // Remove Key
-            elements[i][j].color = elements[i][j].type = sEnum.Empty;
+            elements[i][j].color = sEnum.Empty;
             key = false;
           } else if (key) {
             // Move Key
-            elements[key.row][key.col].color = elements[key.row][key.col].type =
-              sEnum.Empty;
-            elements[i][j].color = elements[i][j].type = sEnum.Key;
+            elements[key.row][key.col].color = sEnum.Empty;
+            elements[i][j].color = sEnum.Key;
             key.row = i;
             key.col = j;
           } else {
             // New Key
-            elements[i][j].color = elements[i][j].type = sEnum.Key;
+            elements[i][j].color = sEnum.Key;
             key = new Position(i, j);
           }
         } else {
-          elements[i][j].color = elements[i][j].type = sEnum.End;
-          elements[end.row][end.col].color = elements[end.row][end.col].type =
-            sEnum.Empty;
+          elements[i][j].color = sEnum.End;
+          elements[end.row][end.col].color = sEnum.Empty;
           end.row = i;
           end.col = j;
         }
@@ -133,14 +127,14 @@ elem.addEventListener("click", listener, false);
 elem.addEventListener(
   "mousedown",
   () => {
-    ++clicked;
+    clicked = 1;
   },
   false
 );
 elem.addEventListener(
   "mouseup",
   () => {
-    --clicked;
+    clicked = 0;
     lastX = -1;
     lastY = -1;
   },
@@ -164,7 +158,7 @@ var refColors = [
 var refLabels = [
   "Start Node",
   "End Node",
-  "Key",
+  "Key (WIP)",
   "Weighted Tile",
   "Wall",
   "Searched",
@@ -173,7 +167,7 @@ var refLabels = [
 ];
 
 vctx.fillStyle = "#4C566A";
-vctx.fillRect(10, 0, 192, 250);
+vctx.fillRect(10, 0, 182, 250);
 
 for (var i = 0; i < refColors.length; ++i) {
   vctx.fillStyle = refColors[i];
@@ -204,6 +198,8 @@ button.onclick = function () {
   } else if (s == "astar") {
     draw(window.innerWidth, 600, elements);
     dijkstra(elements, start, end, true, key);
+  } else if (s == "prim") {
+    Prims(elements, start, end);
   }
 };
 // END Alg Execution

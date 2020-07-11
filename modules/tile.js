@@ -10,20 +10,12 @@ export var sEnum = {
 };
 
 export class Tile {
-  constructor(
-    color = sEnum.Empty,
-    width,
-    height,
-    top,
-    left,
-    type = sEnum.Empty
-  ) {
+  constructor(color = sEnum.Empty, width, height, top, left) {
     this.color = color;
     this.width = width;
     this.height = height;
     this.top = top;
     this.left = left;
-    this.type = type;
   }
 }
 
@@ -57,14 +49,7 @@ export function resize(first, elements) {
         elements[i].push(new Tile(sEnum.Empty, t_size, t_size, top_in, left));
       } else {
         elements[i].push(
-          new Tile(
-            old[i][j].color,
-            t_size,
-            t_size,
-            top_in,
-            left,
-            old[i][j].type
-          )
+          new Tile(old[i][j].color, t_size, t_size, top_in, left)
         );
       }
       left += t_size + gap; // Change for dynamic positioning
@@ -127,7 +112,7 @@ export function paint(elements, row, col, color) {
 
 export function draw(width, height, elements) {
   myCanvas.ctx.fillStyle = "#4C566A";
-  myCanvas.ctx.fillRect(0, 0, width, height);
+  myCanvas.ctx.fillRect(0, 0, myCanvas.width, myCanvas.height);
 
   var start;
 
@@ -140,9 +125,9 @@ export function draw(width, height, elements) {
         elements[i][j].width,
         elements[i][j].height
       );
-      if (elements[i][j].color == sEnum.Start) {
-        start = elements[i][j];
-      }
+      // if (elements[i][j].color == sEnum.Start) {
+      //   start = elements[i][j];
+      // }
     }
   }
 

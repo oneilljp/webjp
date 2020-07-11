@@ -38,10 +38,15 @@
         <p class="boxLabel">Algorithm:</p>
         <div class="box">
           <select id="searchType">
-            <option value="dfs" selected="selected">Depth</option>
-            <option value="bfs">Breath</option>
-            <option value="dijkstra">Dijkstra's</option>
-            <option value="astar">A*</option>
+            <optgroup label="Pathfinding">
+              <option value="dfs" selected="selected">Depth</option>
+              <option value="bfs">Breath</option>
+              <option value="dijkstra">Dijkstra's</option>
+              <option value="astar">A*</option>
+            </optgroup>
+            <optgroup label="Maze Gen">
+              <option value="prim">Prim's</option>
+            </optgroup>
           </select>
         </div>
         <p class="boxLabel">Speed:</p>
@@ -54,7 +59,7 @@
         </div>
         <button type="button" id="start">Start</button>
         <hr />
-        <canvas class="lColor" id="vColor" width="192" height="250"></canvas>
+        <canvas class="lColor" id="vColor" width="182" height="250"></canvas>
         <!-- <span id="soutput"></span> -->
         <!-- <input type="range" min="1" max="40" value="50" class="slider" id="boardSize"> -->
       </span>

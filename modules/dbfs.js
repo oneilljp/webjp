@@ -14,7 +14,7 @@ export function legalPosition(row, col, board) {
     row < board.length &&
     col >= 0 &&
     col < board[0].length &&
-    board[row][col].type != sEnum.Wall
+    board[row][col].color != sEnum.Wall
   );
 }
 

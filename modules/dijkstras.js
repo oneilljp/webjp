@@ -32,7 +32,7 @@ function setupMemo(board, start) {
 
 function acost(board, current, next, end) {
   var gcost, fcost;
-  if (board[current.row][current.col].type === sEnum.Weight) {
+  if (board[current.row][current.col].color === sEnum.Weight) {
     gcost = memo[current.row][current.col].distance + 5;
   } else {
     gcost = memo[current.row][current.col].distance + 1;
@@ -73,7 +73,7 @@ function addPos(board, locations, current, nextPos, end) {
     }
   } else {
     // Weighted Tiles are More Costly to Traverse
-    var cost = board[current.row][current.col].type === sEnum.Weight ? 5 : 1;
+    var cost = board[current.row][current.col].color === sEnum.Weight ? 5 : 1;
 
     if (
       !memo[nextPos.row][nextPos.col].discovered ||
