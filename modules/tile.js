@@ -1,5 +1,4 @@
 import { myCanvas } from "./canvas.js";
-export const name = "tile";
 
 export var sEnum = {
   Wall: "#2E3440",
@@ -35,8 +34,17 @@ export class Position {
   }
 }
 
-export function resize(first, elements, width, height) {
+export function resize(first, elements) {
+  var height = 20;
+  var width = 60;
+
+  let canWidth = document.getElementById("myCanvas").width - 10;
+  let canHeight = document.getElementById("myCanvas").height - 10;
   let t_size = 24;
+
+  width = Math.floor(canWidth / (t_size + 3));
+  height = Math.floor(canHeight / (t_size + 3));
+
   var old = elements.slice(0);
   elements = [];
   var gap = 3;

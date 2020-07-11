@@ -1,12 +1,11 @@
-function create(id, parent, width, height) {
+function create(id, width, height) {
   let bigDiv = document.getElementById("mainScreen");
-  let divWrapper = document.createElement("div");
   let canvasElem = document.createElement("canvas");
-  divWrapper.display = "inline";
-  bigDiv.appendChild(divWrapper);
-  divWrapper.appendChild(canvasElem);
+  canvasElem.display = "inline";
+  bigDiv.appendChild(canvasElem);
 
-  divWrapper.id = id;
+  canvasElem.id = id;
+  canvasElem.style.border = "3px solid #3b4252";
   canvasElem.width = width;
   canvasElem.height = height;
 
@@ -20,9 +19,4 @@ function create(id, parent, width, height) {
   };
 }
 
-export var myCanvas = create(
-  "myCanvas",
-  document.body,
-  window.innerWidth - 280,
-  550
-);
+export var myCanvas = create("myCanvas", window.innerWidth - 280, 550);

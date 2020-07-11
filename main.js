@@ -1,25 +1,32 @@
-import { name, sEnum, Position, Tile, resize, draw } from "./modules/tile.js";
+import { sEnum, Position, Tile, resize, draw } from "./modules/tile.js";
 import { dbfs, visited, searched, found } from "./modules/dbfs.js";
 import { dijkstra } from "./modules/dijkstras.js";
 
-var rowNum = 60;
-var colNum = 20;
+// TODO MAKE RECOLOR FUNCTION!!!!!
+
+// var rowNum = 60;
+// var colNum = 20;
 
 // Tile creation
 var elements = [];
-elements = resize(true, elements, rowNum, colNum);
-elements[8][5].color = elements[0][0].type = sEnum.Start;
-elements[8][elements[0].length - 6].color = elements[0][
-  elements[0].length - 1
-].type = sEnum.End;
+elements = resize(true, elements);
+var start = new Position(elements.length / 2 - 1, 5);
+var end = new Position(elements.length / 2 - 1, elements[0].length - 6);
+
+elements[start.row][start.col].color = elements[start.row][start.col].type =
+  sEnum.Start;
+elements[end.row][end.col].color = elements[end.row][end.col].type = sEnum.End;
 draw(window.innerWidth, 600, elements);
 
-var start = new Position(8, 5);
-var end = new Position(8, elements[0].length - 6);
 var key = false;
 
-elements = resize(false, elements, rowNum, colNum);
+elements = resize(false, elements);
 draw(window.innerWidth, 600, elements);
+
+window.onresize = (event) => {
+  elements = resize(true, elements);
+  draw(window.innerWidth, 600, elements);
+};
 
 // CLick Listener
 var elem = document.getElementById(myCanvas.id),
