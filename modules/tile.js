@@ -38,7 +38,7 @@ export function resize(first, elements) {
   var height = 20;
   var width = 60;
 
-  let canWidth = document.getElementById("myCanvas").width - 10;
+  let canWidth = document.getElementById("myCanvas").width - 5;
   let canHeight = document.getElementById("myCanvas").height - 10;
   let t_size = 24;
 
@@ -51,7 +51,7 @@ export function resize(first, elements) {
   var top_in = 5;
   for (var i = 0; i < height; ++i) {
     elements.push([]);
-    var left = 10;
+    var left = 5;
     for (var j = 0; j < width; j++) {
       if (first) {
         elements[i].push(new Tile(sEnum.Empty, t_size, t_size, top_in, left));

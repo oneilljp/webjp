@@ -19,4 +19,4 @@ function create(id, width, height) {
   };
 }
 
-export var myCanvas = create("myCanvas", window.innerWidth - 280, 550);
+export var myCanvas = create("myCanvas", window.innerWidth - 265, 550);

@@ -24,7 +24,16 @@ elements = resize(false, elements);
 draw(window.innerWidth, 600, elements);
 
 window.onresize = (event) => {
+  document.getElementById("myCanvas").width = window.innerWidth - 265;
   elements = resize(true, elements);
+  start = new Position(elements.length / 2 - 1, 5);
+  end = new Position(elements.length / 2 - 1, elements[0].length - 6);
+
+  elements[start.row][start.col].color = elements[start.row][start.col].type =
+    sEnum.Start;
+  elements[end.row][end.col].color = elements[end.row][end.col].type =
+    sEnum.End;
+
   draw(window.innerWidth, 600, elements);
 };
 

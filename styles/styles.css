@@ -30,8 +30,8 @@ h1 {
   border: 3px solid #3b4252;
   background-color: #d8dee9;
   border-radius: 10px;
-  margin-left: 50px;
-  margin-right: 50px;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 small {
@@ -176,8 +176,8 @@ li a {
 }
 
 #mainScreen {
-  padding-left: 10px;
-  padding-right: 10px;
+  margin-left: 20px;
+  /* margin-right: 10px; */
   display: flex;
   flex-direction: row;
 }
