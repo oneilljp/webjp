@@ -1,25 +1,12 @@
-/* Global Variables I Guess */
 :root {
   --main-text-color: #88c0d0;
 }
-/* /Global Variables I Guess */
-
-/* Unsorted */
 
 body {
-  /*background-image: url('../images/Wallpaper1.jpg');*/
+  background-image: url("../images/Wallpaper1.jpg");
+  background-size: cover;
   /* background-color: #282828; */
-  background-color: #eceff4;
-}
-
-h2 {
-  /*color: var(--main-text-color);*/
-  color: #d79921;
-  font-size: 200%;
-  font-family: Iosevka;
-  border-bottom: 4px solid #3b4252;
-  margin-left: 100px;
-  margin-right: 100px;
+  /* background-color: #eceff4; */
 }
 
 h1 {
@@ -38,21 +25,6 @@ small {
   color: #8fbcbb;
   font-size: 30px;
 }
-
-h3 {
-  color: #edbbb2;
-  text-align: center;
-  font-family: Iosevka;
-  margin-top: -20px;
-  margin-bottom: -20px;
-}
-
-img {
-  border-radius: 4px;
-  margin-top: 10px;
-}
-
-/* /Unsorted */
 
 /* NavBar */
 
@@ -184,4 +156,22 @@ li a {
 
 .label {
   font-family: "Fira Code";
+}
+
+.helper {
+  margin: auto;
+}
+
+.center {
+  /* margin: auto; */
+  /* width: 50%; */
+  /* display: none; */
+  position: fixed;
+  top: 50%;
+  left: 10%;
+  width: 80%;
+  /* height: 100%; */
+  border: 3px solid #3b4252;
+  background-color: #d8dee9;
+  z-index: 99;
 }

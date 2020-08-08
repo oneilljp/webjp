@@ -1,5 +1,5 @@
-import { paint, sEnum } from "./tile.js";
-import { legalPosition, visited, searched, found } from "./dbfs.js";
+import { paint, sEnum, Position } from "./tile.js";
+import { legalPosition, MemoItem, visited, searched, found } from "./dbfs.js";
 // Keep memo backlog of nodes to check if discovered, log shortest distance
 // And log parent of shortest distance
 //
@@ -8,30 +8,37 @@ import { legalPosition, visited, searched, found } from "./dbfs.js";
 // used less for heaps and whatnot. pass memo into this function so that
 // we can keep the queue just as coords
 
+// THIS CURRENT IMPLEMENTATION OF A* IS NOT ACTUALLY A*. ITS THE SWARM ALG
+// FROM THE VID WE WATCHED AND TOOK INSPIRATION FROM
+
 var memo = [];
 var star = false;
+var useKey = true;
+
+class DMemo extends MemoItem {
+  constructor(distance, discovered, prev) {
+    super(discovered, prev);
+    this.distance = distance;
+  }
+}
 
 function setupMemo(board, start) {
   memo = [];
-  for (var i = 0; i < board.length; ++i) {
+  for (let i = 0; i < board.length; ++i) {
     memo.push([]);
-    for (var j = 0; j < board[0].length; ++j) {
-      var piece = new Object();
-      piece.distance = Number.POSITIVE_INFINITY;
-      piece.discovered = false;
+    for (let j = 0; j < board[0].length; ++j) {
+      let piece = new DMemo(Number.POSITIVE_INFINITY, false, "");
       memo[i].push(piece);
     }
   }
 
-  memo[start.row][start.col].distance = 0;
-  memo[start.row][start.col].parent = " ";
-  memo[start.row][start.col].discovered = true;
+  memo[start.row][start.col] = new DMemo(0, true, "");
 }
 
 // ASTAR COST CALCULATION
 
 function acost(board, current, next, end) {
-  var gcost, fcost;
+  let gcost, fcost;
   if (board[current.row][current.col].color === sEnum.Weight) {
     gcost = memo[current.row][current.col].distance + 5;
   } else {
@@ -54,18 +61,19 @@ function acost(board, current, next, end) {
 
 function addPos(board, locations, current, nextPos, end) {
   if (star) {
-    var cost = acost(board, current, nextPos, end);
+    let cost = acost(board, current, nextPos, end);
 
     if (
       !memo[nextPos.row][nextPos.col].discovered ||
       memo[nextPos.row][nextPos.col].distance > cost
     ) {
-      memo[nextPos.row][nextPos.col].discovered = true;
-      memo[nextPos.row][nextPos.col].distance = cost;
-      memo[nextPos.row][nextPos.col].parent = current;
+      // memo[nextPos.row][nextPos.col].discovered = true;
+      // memo[nextPos.row][nextPos.col].distance = cost;
+      // memo[nextPos.row][nextPos.col].prev = current;
+      memo[nextPos.row][nextPos.col] = new DMemo(cost, true, current);
       locations.push(nextPos);
 
-      if (nextPos.row == end.row && nextPos.col == end.col) {
+      if (nextPos.row === end.row && nextPos.col === end.col) {
         throw new Error("End Found");
       } else {
         paint(board, nextPos.row, nextPos.col, searched);
@@ -73,17 +81,22 @@ function addPos(board, locations, current, nextPos, end) {
     }
   } else {
     // Weighted Tiles are More Costly to Traverse
-    var cost = board[current.row][current.col].color === sEnum.Weight ? 5 : 1;
+    let cost = board[current.row][current.col].color === sEnum.Weight ? 5 : 1;
 
     if (
       !memo[nextPos.row][nextPos.col].discovered ||
       memo[nextPos.row][nextPos.col].distance >
         memo[current.row][current.col].distance + cost
     ) {
-      memo[nextPos.row][nextPos.col].discovered = true;
-      memo[nextPos.row][nextPos.col].distance =
-        memo[current.row][current.col].distance + cost;
-      memo[nextPos.row][nextPos.col].parent = current;
+      // memo[nextPos.row][nextPos.col].discovered = true;
+      // memo[nextPos.row][nextPos.col].distance =
+      // memo[current.row][current.col].distance + cost;
+      // memo[nextPos.row][nextPos.col].prev = current;
+      memo[nextPos.row][nextPos.col] = new DMemo(
+        memo[current.row][current.col].distance + cost,
+        true,
+        current
+      );
       locations.push(nextPos);
 
       if (nextPos.row == end.row && nextPos.col == end.col) {
@@ -99,47 +112,59 @@ function addPos(board, locations, current, nextPos, end) {
 
 function checkPos(current, locations, board, end) {
   if (legalPosition(current.row - 1, current.col, board)) {
-    var nextPos = new Object();
-    nextPos.row = current.row - 1;
-    nextPos.col = current.col;
-
+    let nextPos = new Position(current.row - 1, current.col);
     addPos(board, locations, current, nextPos, end);
   } // check north
   if (legalPosition(current.row, current.col + 1, board)) {
-    var nextPos = new Object();
-    nextPos.row = current.row;
-    nextPos.col = current.col + 1;
-
+    let nextPos = new Position(current.row, current.col + 1);
     addPos(board, locations, current, nextPos, end);
   } // check east
   if (legalPosition(current.row + 1, current.col, board)) {
-    var nextPos = new Object();
-    nextPos.row = current.row + 1;
-    nextPos.col = current.col;
-
+    let nextPos = new Position(current.row + 1, current.col);
     addPos(board, locations, current, nextPos, end);
   } // check south
   if (legalPosition(current.row, current.col - 1, board)) {
-    var nextPos = new Object();
-    nextPos.row = current.row;
-    nextPos.col = current.col - 1;
-
+    let nextPos = new Position(current.row, current.col - 1);
     addPos(board, locations, current, nextPos, end);
   } // check west
 }
 
-function paintPath(board, start, end, speed) {
-  var prev = memo[end.row][end.col].parent;
+function loadRoute(end, stopper) {
+  let route = [];
+  let curr = end;
 
-  var painter = setInterval(p, 20 * speed);
+  while (!curr.equals(stopper)) {
+    curr = memo[curr.row][curr.col].prev;
+
+    if (!curr.equals(stopper)) {
+      route.unshift(curr);
+    }
+  }
+
+  return route;
+}
+
+function paintPath(board, start, end, speed) {
+  let paintRoute = [];
+  if (false) {
+  } else {
+    paintRoute = loadRoute(end, start);
+  }
+
+  paint(board, start.row, start.col, sEnum.Start);
+  let painter = setInterval(p, 20 * speed);
 
   function p() {
-    if (prev.row == start.row && prev.col == start.col) {
+    if (paintRoute.length === 0) {
       clearInterval(painter);
-      return;
+      document.getElementById("start").disabled = false;
+      document.getElementById("start").innerHTML = "Start";
+      paint(board, end.row, end.col, sEnum.End);
+    } else {
+      let curr = paintRoute[0];
+      paint(board, curr.row, curr.col, found);
+      paintRoute.shift();
     }
-    paint(board, prev.row, prev.col, found);
-    prev = memo[prev.row][prev.col].parent;
   }
 }
 
@@ -148,23 +173,21 @@ export function dijkstra(board, start, end, astar, key) {
 
   star = astar;
 
-  var startPos = new Object();
-  startPos.row = start.row;
-  startPos.col = start.col;
+  let locations = [start];
 
-  var locations = [startPos];
+  let speed = document.getElementById("speed").value;
 
-  var speed = document.getElementById("speed").value;
-
-  var searcher = setInterval(s, 25 * speed);
+  let searcher = setInterval(s, 25 * speed);
 
   function s() {
-    if (locations.length == 0) {
+    if (locations.length === 0) {
       clearInterval(searcher);
+      document.getElementById("start").disabled = false;
+      document.getElementById("start").innerHTML = "Start";
     } else {
-      var current = locations[0];
+      let current = locations[0];
 
-      if (!(current.row == start.row && current.col == start.col)) {
+      if (!current.equals(start)) {
         paint(board, current.row, current.col, visited);
       }
 
@@ -173,7 +196,6 @@ export function dijkstra(board, start, end, astar, key) {
       } catch (e) {
         console.log(e.message);
         paintPath(board, start, end, speed);
-        // TODO Paint Path Here
         clearInterval(searcher);
       }
 

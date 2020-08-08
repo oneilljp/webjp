@@ -24,6 +24,10 @@ export class Position {
     this.row = row;
     this.col = col;
   }
+
+  equals(pos) {
+    return this.row === pos.row && this.col === pos.col;
+  }
 }
 
 export function resize(first, elements) {
@@ -71,6 +75,13 @@ export function paint(elements, row, col, color) {
   // );
   // Maybe do animated growth box here
   var speed = document.getElementById("speed").value * 2;
+  myCanvas.ctx.fillStyle = sEnum.Wall;
+  myCanvas.ctx.fillRect(
+    elements[row][col].left + len / 4,
+    elements[row][col].top + len / 4,
+    elements[row][col].width / 2,
+    elements[row][col].height / 2
+  );
   myCanvas.ctx.fillStyle = color;
   myCanvas.ctx.fillRect(
     elements[row][col].left + 9,
@@ -80,6 +91,13 @@ export function paint(elements, row, col, color) {
   );
 
   setTimeout(function () {
+    myCanvas.ctx.fillStyle = sEnum.Wall;
+    myCanvas.ctx.fillRect(
+      elements[row][col].left + len / 8,
+      elements[row][col].top + len / 8,
+      (elements[row][col].width * 3) / 4,
+      (elements[row][col].height * 3) / 4
+    );
     myCanvas.ctx.fillStyle = color;
     myCanvas.ctx.fillRect(
       elements[row][col].left + len / 4,
@@ -90,6 +108,13 @@ export function paint(elements, row, col, color) {
   }, 20 * speed);
 
   setTimeout(function () {
+    myCanvas.ctx.fillStyle = sEnum.Wall;
+    myCanvas.ctx.fillRect(
+      elements[row][col].left,
+      elements[row][col].top,
+      elements[row][col].width,
+      elements[row][col].height
+    );
     myCanvas.ctx.fillStyle = color;
     myCanvas.ctx.fillRect(
       elements[row][col].left + len / 8,
@@ -110,11 +135,9 @@ export function paint(elements, row, col, color) {
   }, 60 * speed);
 }
 
-export function draw(width, height, elements) {
+export function draw(elements) {
   myCanvas.ctx.fillStyle = "#4C566A";
   myCanvas.ctx.fillRect(0, 0, myCanvas.width, myCanvas.height);
-
-  var start;
 
   for (var i = 0; i < elements.length; ++i) {
     for (var j = 0; j < elements[i].length; ++j) {
@@ -125,15 +148,6 @@ export function draw(width, height, elements) {
         elements[i][j].width,
         elements[i][j].height
       );
-      // if (elements[i][j].color == sEnum.Start) {
-      //   start = elements[i][j];
-      // }
     }
   }
-
-  // var sIcon = new Image();
-  // sIcon.src = "../images/start1.png";
-  // sIcon.onload = () => {
-  //   myCanvas.ctx.drawImage(sIcon, start.left, start.top);
-  // };
 }

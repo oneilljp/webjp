@@ -1,5 +1,4 @@
 import { sEnum, Position, paint } from "./tile.js";
-import { myCanvas } from "./canvas.js";
 
 export var searched = "#689d6a";
 export var visited = "#458588";
@@ -7,6 +6,29 @@ export var found = "#B48EAD";
 
 var memo = [];
 var deque = [];
+var useKey = false;
+var keyPath = [];
+var keyFound = true;
+
+export class MemoItem {
+  constructor(discovered = false, prev = "") {
+    this.discovered = discovered;
+    this.prev = prev;
+  }
+}
+
+function loadMemo(board) {
+  let temp = [];
+  for (let i = 0; i < board.length; ++i) {
+    temp.push([]);
+    for (let j = 0; j < board[0].length; ++j) {
+      let logItem = new MemoItem();
+      temp[i].push(logItem);
+    }
+  }
+
+  return temp;
+}
 
 export function legalPosition(row, col, board) {
   return (
@@ -22,46 +44,76 @@ function checkPos(row, col, board, loc, dfs, end) {
   if (legalPosition(row, col, board) && !memo[row][col].discovered) {
     memo[row][col].discovered = true;
     memo[row][col].prev = loc;
-    var nextPos = new Position(row, col);
+    let nextPos = new Position(row, col);
 
-    dfs ? deque.unshift(nextPos) : deque.push(nextPos);
-    if (nextPos.row == end.row && nextPos.col == end.col) {
-      throw new Error("End Found");
+    if (nextPos.equals(end)) {
+      if (keyFound) {
+        throw new Error("End Found");
+      } else {
+        return;
+      }
     }
+    if (useKey) {
+      if (nextPos.equals(useKey)) {
+        throw new Error("Key");
+      }
+    }
+    dfs ? deque.unshift(nextPos) : deque.push(nextPos);
     paint(board, row, col, searched);
-  } else {
   }
 }
 
+// Load Route from the end to the stop tile
+function loadRoute(end, stopper) {
+  let route = [];
+  let curr = new Position(end.row, end.col);
+
+  while (!curr.equals(stopper)) {
+    switch (memo[curr.row][curr.col].prev) {
+      case "s":
+        curr.row++;
+        break;
+
+      case "w":
+        curr.col--;
+        break;
+
+      case "n":
+        curr.row--;
+        break;
+
+      case "e":
+        curr.col++;
+        break;
+    }
+    if (!curr.equals(stopper)) {
+      route.unshift(new Position(curr.row, curr.col));
+    }
+  }
+  return route;
+}
+
 function backColor(elements, start, end, speed) {
-  var row = end.row;
-  var col = end.col;
+  let paintRoute = [];
+  if (useKey) {
+    paintRoute = keyPath.concat(loadRoute(end, useKey));
+  } else {
+    paintRoute = loadRoute(end, start);
+  }
 
-  var coloring = setInterval(c, 20 * speed);
+  paint(elements, start.row, start.col, sEnum.Start);
+  let painting = setInterval(c, 20 * speed);
+
   function c() {
-    if (row == start.row && col == start.col) {
-      clearInterval(coloring);
+    if (paintRoute.length === 0) {
+      clearInterval(painting);
+      document.getElementById("start").disabled = false;
+      document.getElementById("start").innerHTML = "Start";
+      paint(elements, end.row, end.col, sEnum.End);
     } else {
-      if (!(row == end.row && col == end.col)) {
-        paint(elements, row, col, found);
-      }
-      switch (memo[row][col].prev) {
-        case "s":
-          row = row + 1;
-          break;
-
-        case "w":
-          col = col - 1;
-          break;
-
-        case "n":
-          row = row - 1;
-          break;
-
-        case "e":
-          col = col + 1;
-          break;
-      }
+      let curr = paintRoute[0];
+      paint(elements, curr.row, curr.col, found);
+      paintRoute.shift();
     }
   }
 }
@@ -69,38 +121,38 @@ function backColor(elements, start, end, speed) {
 // DFS = Stack BFS = Queue
 
 export function dbfs(start, end, key, board, dfs) {
-  var speed = document.getElementById("speed").value;
+  let speed = document.getElementById("speed").value;
   console.log(board[0].length + " " + typeof end);
-  if (
-    !legalPosition(start.row, start.col, board) ||
-    !legalPosition(end.row, end.col, board)
-  ) {
-    console.log("Invalid Start and/or End Position. Returning");
-    return;
-  }
 
-  memo = [];
-  for (var i = 0; i < board.length; ++i) {
-    memo.push([]);
-    for (var j = 0; j < board[0].length; ++j) {
-      var logItem = new Object();
-      logItem.discovered = false;
-      memo[i].push(logItem);
-    }
+  memo = loadMemo(board);
+
+  if (key) {
+    useKey = key;
+    keyPath = [];
+    keyFound = false;
+  } else {
+    keyFound = true;
+    useKey = false;
   }
 
   memo[start.row][start.col].discovered = true;
   deque = [start];
 
-  var searcher = setInterval(s, 25 * speed);
+  let searcher = setInterval(s, 25 * speed);
 
   function s() {
-    if (deque.length == 0) {
+    if (deque.length === 0) {
       clearInterval(searcher);
+      document.getElementById("start").disabled = false;
+      document.getElementById("start").innerHTML = "Start";
     } else {
-      var current = new Position(deque[0].row, deque[0].col);
+      let current = new Position(deque[0].row, deque[0].col);
       deque.shift();
-      if (!(current.row == start.row && current.col == start.col)) {
+      if (
+        !current.equals(start) &&
+        !current.equals(end) &&
+        (useKey ? !current.equals(key) : true)
+      ) {
         paint(board, current.row, current.col, visited);
       }
 
@@ -123,12 +175,45 @@ export function dbfs(start, end, key, board, dfs) {
         );
       } catch (e) {
         console.log(e.message);
-        backColor(board, start, end, speed);
-        clearInterval(searcher);
+
+        if (e.message === "Key") {
+          let tracer = new Position(key.row, key.col);
+          while (!tracer.equals(start)) {
+            switch (memo[tracer.row][tracer.col].prev) {
+              case "n":
+                tracker.row--;
+                break;
+              case "e":
+                tracker.col++;
+                break;
+              case "s":
+                tracker.row++;
+                break;
+              case "w":
+                tracker.col--;
+                break;
+            }
+
+            if (!tracker.equals(start)) {
+              keyPath.unshift(new Position(tracker.row, tracker.col));
+            }
+          }
+
+          // Reset memo to search again from key, avoiding start
+          memo = loadMemo(board);
+          memo[start.row][start.col].discovered = true;
+          memo[key.row][key.col].discovered = true;
+
+          deque = [key];
+          keyFound = true;
+        } else {
+          backColor(board, start, end, speed);
+          clearInterval(searcher);
+        }
       }
     }
   }
 
   console.log("End of Search");
-  return false;
+  return Promise.resolve(false);
 }

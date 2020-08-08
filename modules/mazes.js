@@ -71,7 +71,7 @@ export function Prims(board, start, end) {
     }
   }
 
-  draw(window.innerWidth, 600, board);
+  draw(board);
 
   walls = [];
   addWalls(board, start);
@@ -83,6 +83,8 @@ export function Prims(board, start, end) {
   function p() {
     if (walls.length == 0) {
       clearInterval(primLoop);
+      document.getElementById("start").disabled = false;
+      document.getElementById("start").innerHTML = "Start";
     } else {
       shuffleWalls();
       var current = walls.shift();

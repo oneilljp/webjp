@@ -16,12 +16,12 @@ var end = new Position(elements.length / 2 - 1, elements[0].length - 6);
 
 elements[start.row][start.col].color = sEnum.Start;
 elements[end.row][end.col].color = sEnum.End;
-draw(window.innerWidth, 600, elements);
+draw(elements);
 
 var key = false;
 
 elements = resize(false, elements);
-draw(window.innerWidth, 600, elements);
+draw(elements);
 
 window.onresize = (event) => {
   document.getElementById("myCanvas").width = window.innerWidth - 265;
@@ -32,7 +32,7 @@ window.onresize = (event) => {
   elements[start.row][start.col].color = sEnum.Start;
   elements[end.row][end.col].color = sEnum.End;
 
-  draw(window.innerWidth, 600, elements);
+  draw(elements);
 };
 
 // CLick Listener
@@ -116,7 +116,7 @@ var listener = function (event) {
 
         lastX = i;
         lastY = j;
-        draw(window.innerWidth, 600, elements);
+        draw(elements);
       }
     }
   }
@@ -182,21 +182,23 @@ for (var i = 0; i < refColors.length; ++i) {
 
 // BEG Alg Execution
 var button = document.getElementById("start");
-button.onclick = function () {
+button.onclick = async function () {
+  button.disabled = true;
+  button.innerHTML = "Running...";
   var searchType = document.getElementById("searchType");
   var s = searchType.value;
 
   if (s == "dfs") {
-    draw(window.innerWidth, 600, elements);
+    draw(elements);
     dbfs(start, end, key, elements, true);
   } else if (s == "bfs") {
-    draw(window.innerWidth, 600, elements);
+    draw(elements);
     dbfs(start, end, key, elements, false);
   } else if (s == "dijkstra") {
-    draw(window.innerWidth, 600, elements);
+    draw(elements);
     dijkstra(elements, start, end, false, key);
   } else if (s == "astar") {
-    draw(window.innerWidth, 600, elements);
+    draw(elements);
     dijkstra(elements, start, end, true, key);
   } else if (s == "prim") {
     Prims(elements, start, end);
