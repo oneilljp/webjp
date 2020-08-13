@@ -1,6 +1,8 @@
 import { sEnum, Position, paint } from "./tile.js";
 
+export var presearch = "#5E81AC";
 export var searched = "#689d6a";
+export var previsit = "#8FBCBB";
 export var visited = "#458588";
 export var found = "#B48EAD";
 
@@ -59,7 +61,12 @@ function checkPos(row, col, board, loc, dfs, end) {
       }
     }
     dfs ? deque.unshift(nextPos) : deque.push(nextPos);
-    paint(board, row, col, searched);
+
+    if (useKey && !keyFound) {
+      paint(board, row, col, presearch);
+    } else {
+      paint(board, row, col, searched);
+    }
   }
 }
 
@@ -153,7 +160,11 @@ export function dbfs(start, end, key, board, dfs) {
         !current.equals(end) &&
         (useKey ? !current.equals(key) : true)
       ) {
-        paint(board, current.row, current.col, visited);
+        if (useKey && !keyFound) {
+          paint(board, current.row, current.col, previsit);
+        } else {
+          paint(board, current.row, current.col, visited);
+        }
       }
 
       try {
@@ -181,21 +192,21 @@ export function dbfs(start, end, key, board, dfs) {
           while (!tracer.equals(start)) {
             switch (memo[tracer.row][tracer.col].prev) {
               case "n":
-                tracker.row--;
+                tracer.row--;
                 break;
               case "e":
-                tracker.col++;
+                tracer.col++;
                 break;
               case "s":
-                tracker.row++;
+                tracer.row++;
                 break;
               case "w":
-                tracker.col--;
+                tracer.col--;
                 break;
             }
 
-            if (!tracker.equals(start)) {
-              keyPath.unshift(new Position(tracker.row, tracker.col));
+            if (!tracer.equals(start)) {
+              keyPath.unshift(new Position(tracer.row, tracer.col));
             }
           }
 

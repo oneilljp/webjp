@@ -28,6 +28,10 @@ export class Position {
   equals(pos) {
     return this.row === pos.row && this.col === pos.col;
   }
+
+  toString() {
+    return this.row.toString() + " " + this.col.toString();
+  }
 }
 
 export function resize(first, elements) {

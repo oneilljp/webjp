@@ -1,6 +1,7 @@
 import { sEnum, Position, Tile, resize, draw } from "./modules/tile.js";
 import { dbfs, visited, searched, found } from "./modules/dbfs.js";
 import { dijkstra } from "./modules/dijkstras.js";
+import { aStar } from "./modules/astar.js";
 import { Prims } from "./modules/mazes.js";
 
 // TODO MAKE RECOLOR FUNCTION!!!!!
@@ -199,7 +200,8 @@ button.onclick = async function () {
     dijkstra(elements, start, end, false, key);
   } else if (s == "astar") {
     draw(elements);
-    dijkstra(elements, start, end, true, key);
+    // dijkstra(elements, start, end, true, key);
+    aStar(elements, start, end, key);
   } else if (s == "prim") {
     Prims(elements, start, end);
   }

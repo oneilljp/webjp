@@ -40,7 +40,7 @@ function setupMemo(board, start) {
 function acost(board, current, next, end) {
   let gcost, fcost;
   if (board[current.row][current.col].color === sEnum.Weight) {
-    gcost = memo[current.row][current.col].distance + 5;
+    gcost = memo[current.row][current.col].distance + 15;
   } else {
     gcost = memo[current.row][current.col].distance + 1;
   }
@@ -81,17 +81,13 @@ function addPos(board, locations, current, nextPos, end) {
     }
   } else {
     // Weighted Tiles are More Costly to Traverse
-    let cost = board[current.row][current.col].color === sEnum.Weight ? 5 : 1;
+    let cost = board[current.row][current.col].color === sEnum.Weight ? 15 : 1;
 
     if (
       !memo[nextPos.row][nextPos.col].discovered ||
       memo[nextPos.row][nextPos.col].distance >
         memo[current.row][current.col].distance + cost
     ) {
-      // memo[nextPos.row][nextPos.col].discovered = true;
-      // memo[nextPos.row][nextPos.col].distance =
-      // memo[current.row][current.col].distance + cost;
-      // memo[nextPos.row][nextPos.col].prev = current;
       memo[nextPos.row][nextPos.col] = new DMemo(
         memo[current.row][current.col].distance + cost,
         true,
@@ -185,7 +181,7 @@ export function dijkstra(board, start, end, astar, key) {
       document.getElementById("start").disabled = false;
       document.getElementById("start").innerHTML = "Start";
     } else {
-      let current = locations[0];
+      let current = locations.shift();
 
       if (!current.equals(start)) {
         paint(board, current.row, current.col, visited);
@@ -199,7 +195,6 @@ export function dijkstra(board, start, end, astar, key) {
         clearInterval(searcher);
       }
 
-      locations.shift();
       locations.sort(function (a, b) {
         return memo[a.row][a.col].distance - memo[b.row][b.col].distance;
       }); // Sort so that the shortest distance buddy is at the front
