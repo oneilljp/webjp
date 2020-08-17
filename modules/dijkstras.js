@@ -1,5 +1,13 @@
 import { paint, sEnum, Position } from "./tile.js";
-import { legalPosition, MemoItem, visited, searched, found } from "./dbfs.js";
+import {
+  legalPosition,
+  MemoItem,
+  previsit,
+  visited,
+  presearch,
+  searched,
+  found,
+} from "./dbfs.js";
 // Keep memo backlog of nodes to check if discovered, log shortest distance
 // And log parent of shortest distance
 //
@@ -13,7 +21,9 @@ import { legalPosition, MemoItem, visited, searched, found } from "./dbfs.js";
 
 var memo = [];
 var star = false;
-var useKey = true;
+var useKey = false;
+var keyPath = true;
+var keyFound = true;
 
 class DMemo extends MemoItem {
   constructor(distance, discovered, prev) {
@@ -37,7 +47,7 @@ function setupMemo(board, start) {
 
 // ASTAR COST CALCULATION
 
-function acost(board, current, next, end) {
+function acost(board, current, next, end, key) {
   let gcost, fcost;
   if (board[current.row][current.col].color === sEnum.Weight) {
     gcost = memo[current.row][current.col].distance + 15;
@@ -45,39 +55,40 @@ function acost(board, current, next, end) {
     gcost = memo[current.row][current.col].distance + 1;
   }
 
-  // Calculate F Cost
-  // Estimate distance from End using Basic Distance formula
-  // fcost = Math.sqrt(
-  //   Math.pow(end.row - next.row, 2) + Math.pow(end.col - next.col, 2)
-  // );
-
-  fcost = Math.abs(end.row - next.row) + Math.abs(end.col - next.col);
-
+  if (keyFound) {
+    fcost = Math.abs(end.row - next.row) + Math.abs(end.col - next.col);
+  } else {
+    fcost = Math.abs(key.row - next.row) + Math.abs(key.col - next.col);
+  }
   // Return overall h cost
   return gcost + fcost;
 }
 
 // Add Position to Visitable Locations
 
-function addPos(board, locations, current, nextPos, end) {
+function addPos(board, locations, current, nextPos, start, end, key) {
   if (star) {
-    let cost = acost(board, current, nextPos, end);
+    let cost = acost(board, current, nextPos, end, key);
 
     if (
       !memo[nextPos.row][nextPos.col].discovered ||
       memo[nextPos.row][nextPos.col].distance > cost
     ) {
-      // memo[nextPos.row][nextPos.col].discovered = true;
-      // memo[nextPos.row][nextPos.col].distance = cost;
-      // memo[nextPos.row][nextPos.col].prev = current;
       memo[nextPos.row][nextPos.col] = new DMemo(cost, true, current);
-      locations.push(nextPos);
 
-      if (nextPos.row === end.row && nextPos.col === end.col) {
-        throw new Error("End Found");
-      } else {
-        paint(board, nextPos.row, nextPos.col, searched);
+      if (nextPos.equals(end)) {
+        if (keyFound) {
+          throw new Error("End Found");
+        } else {
+          return;
+        }
       }
+      if (useKey && nextPos.equals(key)) {
+        throw new Error("Key");
+      }
+
+      locations.push(nextPos);
+      paint(board, nextPos.row, nextPos.col, keyFound ? searched : presearch);
     }
   } else {
     // Weighted Tiles are More Costly to Traverse
@@ -93,41 +104,48 @@ function addPos(board, locations, current, nextPos, end) {
         true,
         current
       );
-      locations.push(nextPos);
 
-      if (nextPos.row == end.row && nextPos.col == end.col) {
-        throw new Error("End Found");
-      } else {
-        paint(board, nextPos.row, nextPos.col, searched);
+      if (nextPos.equals(end)) {
+        if (keyFound) {
+          throw new Error("End Found");
+        } else {
+          return;
+        }
       }
+      if (useKey && nextPos.equals(key)) {
+        throw new Error("Key");
+      }
+
+      locations.push(nextPos);
+      paint(board, nextPos.row, nextPos.col, keyFound ? searched : presearch);
     }
   }
 }
 
 // Search Locations arround current tile
 
-function checkPos(current, locations, board, end) {
+function checkPos(current, locations, board, start, end, key) {
   if (legalPosition(current.row - 1, current.col, board)) {
     let nextPos = new Position(current.row - 1, current.col);
-    addPos(board, locations, current, nextPos, end);
+    addPos(board, locations, current, nextPos, start, end, key);
   } // check north
   if (legalPosition(current.row, current.col + 1, board)) {
     let nextPos = new Position(current.row, current.col + 1);
-    addPos(board, locations, current, nextPos, end);
+    addPos(board, locations, current, nextPos, start, end, key);
   } // check east
   if (legalPosition(current.row + 1, current.col, board)) {
     let nextPos = new Position(current.row + 1, current.col);
-    addPos(board, locations, current, nextPos, end);
+    addPos(board, locations, current, nextPos, start, end, key);
   } // check south
   if (legalPosition(current.row, current.col - 1, board)) {
     let nextPos = new Position(current.row, current.col - 1);
-    addPos(board, locations, current, nextPos, end);
+    addPos(board, locations, current, nextPos, start, end, key);
   } // check west
 }
 
 function loadRoute(end, stopper) {
   let route = [];
-  let curr = end;
+  let curr = new Position(end.row, end.col);
 
   while (!curr.equals(stopper)) {
     curr = memo[curr.row][curr.col].prev;
@@ -140,15 +158,16 @@ function loadRoute(end, stopper) {
   return route;
 }
 
-function paintPath(board, start, end, speed) {
+function paintPath(board, start, end, key, speed) {
   let paintRoute = [];
-  if (false) {
+  if (useKey) {
+    paintRoute = keyPath.concat(loadRoute(end, key));
   } else {
     paintRoute = loadRoute(end, start);
   }
 
   paint(board, start.row, start.col, sEnum.Start);
-  let painter = setInterval(p, 20 * speed);
+  let painter = setInterval(p, 10 * speed);
 
   function p() {
     if (paintRoute.length === 0) {
@@ -158,7 +177,9 @@ function paintPath(board, start, end, speed) {
       paint(board, end.row, end.col, sEnum.End);
     } else {
       let curr = paintRoute[0];
-      paint(board, curr.row, curr.col, found);
+      if (!curr.equals(start)) {
+        paint(board, curr.row, curr.col, found);
+      }
       paintRoute.shift();
     }
   }
@@ -167,13 +188,22 @@ function paintPath(board, start, end, speed) {
 export function dijkstra(board, start, end, astar, key) {
   setupMemo(board, start);
 
+  if (key) {
+    useKey = true;
+    keyFound = false;
+    keyPath = [];
+  } else {
+    useKey = false;
+    keyFound = true;
+  }
+
   star = astar;
 
   let locations = [start];
 
   let speed = document.getElementById("speed").value;
 
-  let searcher = setInterval(s, 25 * speed);
+  let searcher = setInterval(s, 15 * speed);
 
   function s() {
     if (locations.length === 0) {
@@ -183,16 +213,24 @@ export function dijkstra(board, start, end, astar, key) {
     } else {
       let current = locations.shift();
 
-      if (!current.equals(start)) {
-        paint(board, current.row, current.col, visited);
+      if (!current.equals(start) && !current.equals(key)) {
+        paint(board, current.row, current.col, keyFound ? visited : previsit);
       }
 
       try {
-        checkPos(current, locations, board, end);
+        checkPos(current, locations, board, start, end, key);
       } catch (e) {
-        console.log(e.message);
-        paintPath(board, start, end, speed);
-        clearInterval(searcher);
+        if (e.message === "Key") {
+          keyPath = loadRoute(key, start);
+          keyFound = true;
+
+          setupMemo(board, key);
+          locations = [key];
+        } else {
+          console.log(e.message);
+          paintPath(board, start, end, key, speed);
+          clearInterval(searcher);
+        }
       }
 
       locations.sort(function (a, b) {

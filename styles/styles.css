@@ -167,11 +167,24 @@ li a {
   /* width: 50%; */
   /* display: none; */
   position: fixed;
-  top: 50%;
+  top: 30%;
   left: 10%;
   width: 80%;
   /* height: 100%; */
+  border-radius: 10px;
   border: 3px solid #3b4252;
   background-color: #d8dee9;
   z-index: 99;
+}
+
+h2 {
+  text-align: center;
+  font-family: "Fira Code";
+  font-size: 200%;
+  background-color: #434c5e;
+  color: #d8dee9;
+  /* width: 80%; */
+  margin: 0;
+  /* margin-left: 10%; */
+  padding: 0;
 }

@@ -1,8 +1,17 @@
 import { sEnum, Position, Tile, resize, draw } from "./modules/tile.js";
-import { dbfs, visited, searched, found } from "./modules/dbfs.js";
+import {
+  dbfs,
+  visited,
+  searched,
+  previsit,
+  presearch,
+  found,
+} from "./modules/dbfs.js";
 import { dijkstra } from "./modules/dijkstras.js";
 import { aStar } from "./modules/astar.js";
-import { Prims } from "./modules/mazes.js";
+import { Prims } from "./modules/prims.js";
+import { Kruskals } from "./modules/kruskals.js";
+import { RecursiveDivision } from "./modules/recursive.js";
 
 // TODO MAKE RECOLOR FUNCTION!!!!!
 
@@ -58,7 +67,7 @@ var listener = function (event) {
         continue;
       }
       if (
-        y > elements[i][j].top &&
+        y >= elements[i][j].top &&
         y < elements[i][j].top + elements[i][j].height &&
         x > elements[i][j].left &&
         x < elements[i][j].left + elements[i][j].width
@@ -179,6 +188,12 @@ for (var i = 0; i < refColors.length; ++i) {
   vctx.fillText(refLabels[i], 54, 28 + 30 * i);
 }
 
+vctx.fillStyle = presearch;
+vctx.fillRect(20, 160, 12, 24);
+
+vctx.fillStyle = previsit;
+vctx.fillRect(20, 190, 12, 24);
+
 // END Reference Label Coloring
 
 // BEG Alg Execution
@@ -198,12 +213,18 @@ button.onclick = async function () {
   } else if (s == "dijkstra") {
     draw(elements);
     dijkstra(elements, start, end, false, key);
+  } else if (s === "bdijkstra") {
+    draw(elements);
+    dijkstra(elements, start, end, true, key);
   } else if (s == "astar") {
     draw(elements);
-    // dijkstra(elements, start, end, true, key);
     aStar(elements, start, end, key);
   } else if (s == "prim") {
-    Prims(elements, start, end);
+    Prims(elements, start);
+  } else if (s == "kruskal") {
+    Kruskals(elements);
+  } else if (s === "recurse") {
+    RecursiveDivision(elements);
   }
 };
 // END Alg Execution

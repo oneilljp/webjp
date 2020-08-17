@@ -1,5 +1,5 @@
 import { paint, sEnum, Position } from "./tile.js";
-import { legalPosition, visited, searched, found } from "./dbfs.js";
+import { legalPosition, previsit, visited, found } from "./dbfs.js";
 import { Priority } from "./pq.js";
 
 // Redoing A Star alg:
@@ -40,8 +40,24 @@ function backPaint(board, start, key, end, prev) {
     path = makePath(start, end, prev);
   }
 
-  for (let pos of path) {
-    paint(board, pos.row, pos.col, found);
+  // for (let pos of path) {
+  // paint(board, pos.row, pos.col, found);
+  // }
+
+  let speed = document.getElementById("speed").value;
+  let painter = setInterval(p, 10 * speed);
+  paint(board, start.row, start.col, sEnum.Start);
+
+  function p() {
+    if (path.length === 0) {
+      clearInterval(painter);
+    } else {
+      let curr = path[0];
+      if (!curr.equals(start)) {
+        paint(board, curr.row, curr.col, found);
+      }
+      path.shift();
+    }
   }
 }
 
@@ -66,22 +82,60 @@ export function aStar(board, start, end, key) {
   // G cost + Heuristic distance to goal node
   let fScore = new Map();
   // Replace end w/ key in key impl
-  fScore.set(start.toString(), mDistance(start, end));
+  if (useKey) {
+    fScore.set(start.toString(), mDistance(start, key));
+  } else {
+    fScore.set(start.toString(), mDistance(start, end));
+  }
 
-  while (!candidates.empty()) {
+  let speed = document.getElementById("speed").value;
+
+  let searcher = setInterval(s, 15 * speed);
+
+  // while (!candidates.empty()) {
+  function s() {
+    if (candidates.empty()) {
+      document.getElementById("start").innerHTML = "Start";
+      document.getElementById("start").disabled = false;
+      clearInterval(searcher);
+    }
     let curr = candidates.dequeue();
 
     if (
       !curr.equals(start) &&
       !curr.equals(end) &&
-      (useKey ? !neighbor.equals(key) : true)
+      (useKey ? !curr.equals(key) : true)
     ) {
-      paint(board, curr.row, curr.col, visited);
+      paint(board, curr.row, curr.col, keyFound ? visited : previsit);
     }
 
     if (curr.equals(end)) {
+      if (!keyFound) {
+        return;
+      }
       console.log("Path Found and Working");
-      backPaint(board, start, end, prev);
+      backPaint(board, start, key, end, prev);
+      document.getElementById("start").innerHTML = "Start";
+      document.getElementById("start").disabled = false;
+      clearInterval(searcher);
+    }
+
+    if (!keyFound && curr.equals(key)) {
+      keyPath = makePath(start, key, prev);
+
+      // Reset Queue and Maps to begin search from key to end
+      candidates = new Priority();
+      candidates.enqueue(key, 0);
+
+      prev.clear();
+      gScore.clear();
+      fScore.clear();
+
+      gScore.set(key.toString(), 0);
+      fScore.set(key.toString(), mDistance(key, end));
+
+      keyFound = true;
+
       return;
     }
 
@@ -94,13 +148,7 @@ export function aStar(board, start, end, key) {
 
     for (let neighbor of neighbors) {
       if (legalPosition(neighbor.row, neighbor.col, board)) {
-        if (
-          !neighbor.equals(start) &&
-          !neighbor.equals(end) &&
-          (useKey ? !neighbor.equals(key) : true)
-        ) {
-          paint(board, neighbor.row, neighbor.col, visited);
-        }
+        // Seed gScore if non-existant to infinity
         if (!gScore.get(neighbor.toString())) {
           gScore.set(neighbor.toString(), Number.POSITIVE_INFINITY);
         }
@@ -111,7 +159,10 @@ export function aStar(board, start, end, key) {
         if (newG < gScore.get(neighbor.toString())) {
           prev.set(neighbor.toString(), curr);
           gScore.set(neighbor.toString(), newG);
-          fScore.set(neighbor.toString(), newG + mDistance(neighbor, end));
+          fScore.set(
+            neighbor.toString(),
+            newG + mDistance(neighbor, keyFound ? end : key)
+          );
 
           if (!candidates.contains(neighbor)) {
             candidates.enqueue(neighbor, fScore.get(neighbor.toString()));

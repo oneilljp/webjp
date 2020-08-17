@@ -2,7 +2,7 @@ import { sEnum, draw, Position, paint } from "./tile.js";
 
 var walls = [];
 
-function inBounds(board, pos) {
+export function inBounds(board, pos) {
   return (
     pos.row >= 0 &&
     pos.row < board.length &&
@@ -12,16 +12,16 @@ function inBounds(board, pos) {
 }
 
 function addWalls(board, pos) {
-  var N = new Position(pos.row - 1, pos.col);
-  var E = new Position(pos.row, pos.col + 1);
-  var S = new Position(pos.row + 1, pos.col);
-  var W = new Position(pos.row, pos.col - 1);
+  let N = new Position(pos.row - 1, pos.col);
+  let E = new Position(pos.row, pos.col + 1);
+  let S = new Position(pos.row + 1, pos.col);
+  let W = new Position(pos.row, pos.col - 1);
 
   let locs = [N, E, S, W];
-  for (var i = 0; i < locs.length; ++i) {
+  for (let i = 0; i < locs.length; ++i) {
     if (
       inBounds(board, locs[i]) &&
-      board[locs[i].row][locs[i].col].color == sEnum.Wall &&
+      board[locs[i].row][locs[i].col].color === sEnum.Wall &&
       !walls.includes(locs[i])
     ) {
       walls.push(locs[i]);
@@ -30,18 +30,18 @@ function addWalls(board, pos) {
 }
 
 function checkWall(board, pos) {
-  var openCount = 0;
-  var N = new Position(pos.row - 1, pos.col);
-  var E = new Position(pos.row, pos.col + 1);
-  var S = new Position(pos.row + 1, pos.col);
-  var W = new Position(pos.row, pos.col - 1);
+  let openCount = 0;
+  let N = new Position(pos.row - 1, pos.col);
+  let E = new Position(pos.row, pos.col + 1);
+  let S = new Position(pos.row + 1, pos.col);
+  let W = new Position(pos.row, pos.col - 1);
 
   let locs = [N, E, S, W];
-  for (var i = 0; i < locs.length; ++i) {
+  for (let i = 0; i < locs.length; ++i) {
     if (
       inBounds(board, locs[i]) &&
-      board[locs[i].row][locs[i].col].color != sEnum.Wall &&
-      board[locs[i].row][locs[i].col].color != sEnum.End
+      board[locs[i].row][locs[i].col].color !== sEnum.Wall &&
+      board[locs[i].row][locs[i].col].color !== sEnum.End
     ) {
       ++openCount;
     }
@@ -50,22 +50,22 @@ function checkWall(board, pos) {
     }
   }
 
-  return openCount == 1;
+  return openCount === 1;
 }
 
 function shuffleWalls() {
-  for (var i = walls.length - 1; i > 0; i--) {
-    var j = Math.floor(Math.random() * (i + 1));
-    var temp = walls[i];
+  for (let i = walls.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * (i + 1));
+    let temp = walls[i];
     walls[i] = walls[j];
     walls[j] = temp;
   }
 }
 
-export function Prims(board, start, end) {
-  for (var i = 0; i < board.length; ++i) {
-    for (var j = 0; j < board[0].length; ++j) {
-      if (board[i][j].color == sEnum.Empty) {
+export function Prims(board, start) {
+  for (let i = 0; i < board.length; ++i) {
+    for (let j = 0; j < board[0].length; ++j) {
+      if (board[i][j].color === sEnum.Empty) {
         board[i][j].color = sEnum.Wall;
       }
     }
@@ -76,18 +76,18 @@ export function Prims(board, start, end) {
   walls = [];
   addWalls(board, start);
 
-  var speed = document.getElementById("speed").value;
+  let speed = document.getElementById("speed").value;
 
-  var primLoop = setInterval(p, 5 * speed);
+  let primLoop = setInterval(p, speed);
 
   function p() {
-    if (walls.length == 0) {
+    if (walls.length === 0) {
       clearInterval(primLoop);
       document.getElementById("start").disabled = false;
       document.getElementById("start").innerHTML = "Start";
     } else {
       shuffleWalls();
-      var current = walls.shift();
+      let current = walls.shift();
 
       if (checkWall(board, current)) {
         board[current.row][current.col].color = sEnum.Empty;

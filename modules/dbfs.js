@@ -109,7 +109,8 @@ function backColor(elements, start, end, speed) {
   }
 
   paint(elements, start.row, start.col, sEnum.Start);
-  let painting = setInterval(c, 20 * speed);
+  let painting = setInterval(c, 10 * speed);
+  paint(elements, start.row, start.col, sEnum.Start);
 
   function c() {
     if (paintRoute.length === 0) {
@@ -119,7 +120,9 @@ function backColor(elements, start, end, speed) {
       paint(elements, end.row, end.col, sEnum.End);
     } else {
       let curr = paintRoute[0];
-      paint(elements, curr.row, curr.col, found);
+      if (!curr.equals(start)) {
+        paint(elements, curr.row, curr.col, found);
+      }
       paintRoute.shift();
     }
   }
@@ -145,7 +148,7 @@ export function dbfs(start, end, key, board, dfs) {
   memo[start.row][start.col].discovered = true;
   deque = [start];
 
-  let searcher = setInterval(s, 25 * speed);
+  let searcher = setInterval(s, 15 * speed);
 
   function s() {
     if (deque.length === 0) {
@@ -212,7 +215,6 @@ export function dbfs(start, end, key, board, dfs) {
 
           // Reset memo to search again from key, avoiding start
           memo = loadMemo(board);
-          memo[start.row][start.col].discovered = true;
           memo[key.row][key.col].discovered = true;
 
           deque = [key];
@@ -226,5 +228,5 @@ export function dbfs(start, end, key, board, dfs) {
   }
 
   console.log("End of Search");
-  return Promise.resolve(false);
+  return false;
 }
