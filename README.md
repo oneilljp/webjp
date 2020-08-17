@@ -2,7 +2,7 @@
 
 ## About
 
-This is a web project that I built in order to showcase the knowledge of different algorithms I gained from my Data Structures and Algorithms Course. It's my hope that this project can be used by other students learning these algorithms, in order to help them visualize and conceptualize what each algorithm does. Users can either draw a maze on the grid themselves, or utilize one of two algorithms in order to generate a maze for them, before visualizing one of five different pathfinding algorithms.
+This is a web project that I built in order to showcase the knowledge of different algorithms I gained from my Data Structures and Algorithms Course. It's my hope that this project can be used by other students learning these algorithms, in order to help them visualize and conceptualize what each algorithm does. Users can either draw a maze on the grid themselves, or utilize one of two algorithms in order to generate a maze for them, before visualizing one of five different pathfinding algorithms. Can be found at oneilljp.github.io/projects.html
 
 ## Features:
 
