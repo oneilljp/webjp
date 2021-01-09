@@ -168,7 +168,7 @@ var refColors = [
 var refLabels = [
   "Start Node",
   "End Node",
-  "Key (WIP)",
+  "Key",
   "Weighted Tile",
   "Wall",
   "Searched",
