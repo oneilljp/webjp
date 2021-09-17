@@ -2,46 +2,49 @@
   --main-text-color: #88c0d0;
 }
 
+html {
+  font-size: 100%;
+}
+
 body {
-  background-image: url("../images/Wallpaper1.jpg");
-  background-size: cover;
-  /* background-color: #282828; */
-  /* background-color: #eceff4; */
+  background-color: #2e3440;
 }
 
 h1 {
   color: var(--main-text-color);
+  background-color: #3B4252;
+  border: 3px solid #434c5e;
+  border-radius: 10px;
   font-family: Iosevka;
   text-align: center;
-  font-size: 300%;
-  border: 3px solid #3b4252;
-  background-color: #d8dee9;
-  border-radius: 10px;
-  margin-left: 10px;
-  margin-right: 10px;
+  font-size: 3rem;
+  margin-left: 4%;
+  margin-right: 4%;
 }
 
 small {
   color: #8fbcbb;
-  font-size: 30px;
+  font-size: 2rem;
 }
 
 /* NavBar */
 
 .navbar {
   list-style-type: none;
-  margin: 0;
+  margin: 2%;
   padding: 0;
   overflow: hidden;
   border-bottom: 3px solid #3b4252;
+  border-radius: 10px;
   background-color: #434c5e;
 }
 
 li {
   float: right;
   font-family: Iosevka;
-  font-size: 20px;
+  font-size: 1.7rem;
   color: var(--main-text-color);
+  vertical-align: middle;
 }
 
 .list {
@@ -57,8 +60,10 @@ li a {
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
+  transition: background-color 0.5s;
 }
-:window-inactive li a:hover {
+
+li a:hover {
   background-color: #4c566a;
 }
 
@@ -71,120 +76,62 @@ li a {
   display: block;
   text-align: center;
   padding: 14px 16px;
-  font-size: 25px;
+  font-size: 2rem;
 }
 
 /* NavBar End */
 
-/*Selection Styling*/
-
-.boxLabel {
-  padding: 0;
-  margin: 0;
-  padding-left: 10px;
-  font-family: "Fira Code";
+/* Project Generics */
+.project-list {
+  margin-left: 4%;
+  margin-right: 4%;
+  /* display: flex; */
+  justify-content: center;
 }
 
-.box {
-  top: 50%;
-  left: 50%;
-  padding: 10px;
-  padding-top: 0px;
-}
-
-.box select {
-  background-color: #5e81ac;
-  color: #d8dee9;
-  padding: 12px;
-  width: 175px;
-  border: none;
-  font-size: 20px;
-  font-family: "Fira Code";
-  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
-  -webkit-appearance: button;
-  appearance: button;
-  outline: none;
-}
-
-.box::before {
-  font-family: FontAwesome;
-  top: 0;
-  right: 0;
-  width: 20%;
-  height: 100%;
-  text-align: center;
-  font-size: 28px;
-  line-height: 45px;
-  color: rgba(255, 255, 255, 0.5);
-  background-color: rgba(255, 255, 255, 0.1);
-  pointer-events: none;
-}
-
-.box:hover::before {
-  color: rgba(255, 255, 255, 0.6);
-  background-color: rgba(255, 255, 255, 0.2);
-}
-
-.box select option {
-  padding: 30px;
-}
-
-/* Selection Styling End */
-
-.boardControls {
-  background-color: #d8dee9;
-  border: 3px solid #3b4252;
-  display: inline-block;
-}
-
-#start {
-  background-color: #5e81ac;
-  color: #d8dee9;
-  border: none;
-  width: 175px;
-  margin: 10px 10px;
-  padding: 10px 10px;
-  font-size: 20px;
-}
-
-#mainScreen {
-  margin-left: 20px;
-  /* margin-right: 10px; */
-  display: flex;
-  flex-direction: row;
-}
-
-.label {
-  font-family: "Fira Code";
-}
-
-.helper {
-  margin: auto;
-}
-
-.center {
-  /* margin: auto; */
-  /* width: 50%; */
-  /* display: none; */
-  position: fixed;
-  top: 30%;
-  left: 10%;
-  width: 80%;
-  /* height: 100%; */
-  border-radius: 10px;
-  border: 3px solid #3b4252;
-  background-color: #d8dee9;
-  z-index: 99;
-}
-
-h2 {
-  text-align: center;
-  font-family: "Fira Code";
-  font-size: 200%;
+.project-entry {
   background-color: #434c5e;
-  color: #d8dee9;
-  /* width: 80%; */
-  margin: 0;
-  /* margin-left: 10%; */
-  padding: 0;
+  border: 3px solid #3b4252;
+  border-radius: 10px;
+  flex-grow: 1;
+  margin: 10px;
 }
+
+.project-title {
+  color: var(--main-text-color);
+  font-family: Iosevka;
+  font-weight: bold;
+  font-size: 2.25rem;
+  text-align: center;
+}
+
+.project-info {
+  display: flex;
+}
+
+.proj-img {
+  height: 20rem;
+  margin: 1rem;
+  border-radius: 10px;
+}
+
+.project-desc {
+  font-family: Iosevka;
+  font-size: 1.5rem;
+  color: #ECEFF4;
+  margin: 1rem;
+  flex-grow: 2;
+}
+
+.project-desc-sub {
+  color: #BF616A;
+  font-weight: bold;
+}
+
+.link {
+  text-decoration: underline;
+  color: #5E81AC;
+  text-align: center;
+}
+
+/* Project Generics End */
